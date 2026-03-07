@@ -15,7 +15,9 @@
     "collect:hn": "tsx scripts/collect-hn.ts",
     "collect:all": "tsx scripts/collect-github.ts && tsx scripts/collect-hn.ts",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
@@ -42,6 +44,7 @@
     "prettier": "^3.8.1",
     "tailwindcss": "^4.0.0",
     "tsx": "^4.19.2",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.0.18"
   }
 }
