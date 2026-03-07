@@ -5,7 +5,9 @@ A tool that combines real-time developer sentiment analysis with AI-powered arch
 ## Features
 
 ### Momentum Leaderboard
+
 Ranks AI dev tools by real developer sentiment using:
+
 - GitHub star velocity
 - Hacker News activity
 - Reddit discussions
@@ -14,7 +16,9 @@ Ranks AI dev tools by real developer sentiment using:
 Updated daily with automated data collection.
 
 ### Architecture Generator
+
 Describe what you want to build and get back:
+
 - Recommended tech stack based on live sentiment data
 - Mermaid.js architecture diagram
 - Step-by-step build instructions

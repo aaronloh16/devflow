@@ -1,0 +1,164 @@
+import postgres from "postgres";
+import { drizzle } from "drizzle-orm/postgres-js";
+import { eq, and, gte, desc } from "drizzle-orm";
+import { tools, hnSnapshots, momentumScores } from "../src/lib/schema";
+
+const DATABASE_URL = process.env.DATABASE_URL;
+
+if (!DATABASE_URL) {
+  console.error("DATABASE_URL is required");
+  process.exit(1);
+}
+
+const client = postgres(DATABASE_URL, { prepare: false });
+const db = drizzle(client);
+
+interface HNSearchResult {
+  hits: Array<{
+    title: string;
+    url: string;
+    points: number;
+    num_comments: number;
+    objectID: string;
+    created_at: string;
+  }>;
+  nbHits: number;
+}
+
+async function searchHN(query: string, numericFilters: string): Promise<HNSearchResult> {
+  const params = new URLSearchParams({
+    query,
+    tags: "story",
+    numericFilters,
+    hitsPerPage: "100",
+  });
+
+  const res = await fetch(`https://hn.algolia.com/api/v1/search?${params.toString()}`);
+
+  if (!res.ok) {
+    throw new Error(`HN API error: ${res.status}`);
+  }
+
+  return res.json() as Promise<HNSearchResult>;
+}
+
+async function collectHNData() {
+  const allTools = await db.select().from(tools);
+  console.log(`Collecting HN data for ${allTools.length} tools...`);
+
+  // Search for mentions in the last 7 days
+  const sevenDaysAgo = Math.floor((Date.now() - 7 * 24 * 60 * 60 * 1000) / 1000);
+  const numericFilters = `created_at_i>${sevenDaysAgo}`;
+
+  let success = 0;
+
+  for (const tool of allTools) {
+    const searchTerms = (tool.hnSearchTerms as string[]) || [];
+    if (searchTerms.length === 0) continue;
+
+    let totalMentions = 0;
+    let totalPoints = 0;
+    let totalComments = 0;
+    let topStoryUrl: string | null = null;
+    let topStoryPoints = 0;
+
+    for (const term of searchTerms) {
+      try {
+        const result = await searchHN(term, numericFilters);
+
+        for (const hit of result.hits) {
+          totalMentions++;
+          totalPoints += hit.points || 0;
+          totalComments += hit.num_comments || 0;
+
+          if ((hit.points || 0) > topStoryPoints) {
+            topStoryPoints = hit.points || 0;
+            topStoryUrl = `https://news.ycombinator.com/item?id=${hit.objectID}`;
+          }
+        }
+      } catch (err) {
+        console.error(`  Error searching HN for "${term}":`, err);
+      }
+
+      // Algolia rate limit: 10,000 requests/hour, but be polite
+      await new Promise((r) => setTimeout(r, 200));
+    }
+
+    await db.insert(hnSnapshots).values({
+      toolId: tool.id,
+      mentionCount: totalMentions,
+      totalPoints,
+      totalComments,
+      topStoryUrl,
+    });
+
+    if (totalMentions > 0) {
+      console.log(`  ${tool.name}: ${totalMentions} mentions, ${totalPoints} points`);
+    }
+
+    success++;
+  }
+
+  console.log(`\nHN collection done. ${success} tools processed.`);
+}
+
+async function updateMomentumWithHN() {
+  console.log(`\nUpdating momentum scores with HN data...`);
+
+  const allTools = await db.select().from(tools);
+
+  for (const tool of allTools) {
+    // Get latest HN snapshot
+    const [latestHN] = await db
+      .select()
+      .from(hnSnapshots)
+      .where(eq(hnSnapshots.toolId, tool.id))
+      .orderBy(desc(hnSnapshots.collectedAt))
+      .limit(1);
+
+    if (!latestHN) continue;
+
+    // Get latest momentum score
+    const [latestMomentum] = await db
+      .select()
+      .from(momentumScores)
+      .where(eq(momentumScores.toolId, tool.id))
+      .orderBy(desc(momentumScores.calculatedAt))
+      .limit(1);
+
+    if (!latestMomentum) continue;
+
+    // Update the momentum score with HN data
+    // Scoring: star_velocity + (hn_points_7d * 0.1) + (hn_mentions_7d * 2)
+    const hnBoost = latestHN.totalPoints * 0.1 + latestHN.mentionCount * 2;
+    const overallScore = latestMomentum.starVelocity + hnBoost;
+
+    await db.insert(momentumScores).values({
+      toolId: tool.id,
+      starVelocity: latestMomentum.starVelocity,
+      hnMentions7d: latestHN.mentionCount,
+      hnPoints7d: latestHN.totalPoints,
+      overallScore: Math.round(overallScore * 100) / 100,
+    });
+
+    if (hnBoost > 0) {
+      console.log(
+        `  ${tool.name}: hn_boost=+${hnBoost.toFixed(1)}, total=${overallScore.toFixed(1)}`
+      );
+    }
+  }
+}
+
+async function main() {
+  try {
+    await collectHNData();
+    await updateMomentumWithHN();
+  } catch (err) {
+    console.error("HN collection failed:", err);
+    process.exit(1);
+  } finally {
+    await client.end();
+  }
+}
+
+main();
