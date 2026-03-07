@@ -1,12 +1,5 @@
 import Link from "next/link";
-import {
-  Trophy,
-  Sparkles,
-  TrendingUp,
-  ArrowUpRight,
-  Star,
-  Activity,
-} from "lucide-react";
+import { Trophy, Sparkles, TrendingUp, ArrowUpRight, Star, Activity } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -21,9 +14,7 @@ interface TopMover {
 async function getTopMovers(): Promise<TopMover[]> {
   try {
     const { db } = await import("@/lib/db");
-    const { tools, momentumScores, githubSnapshots } = await import(
-      "@/lib/schema"
-    );
+    const { tools, momentumScores, githubSnapshots } = await import("@/lib/schema");
     const { eq, desc } = await import("drizzle-orm");
 
     const allTools = await db.select().from(tools);
@@ -84,9 +75,8 @@ export default async function Home() {
             <span className="text-emerald-400">actually using</span>
           </h1>
           <p className="text-lg text-zinc-400 max-w-xl mx-auto leading-relaxed">
-            AI dev tool rankings backed by live sentiment data.
-            See&nbsp;what&rsquo;s gaining momentum, then generate an
-            architecture that uses it.
+            AI dev tool rankings backed by live sentiment data. See&nbsp;what&rsquo;s
+            gaining momentum, then generate an architecture that uses it.
           </p>
           <div className="flex gap-3 justify-center pt-2">
             <Link
@@ -114,12 +104,10 @@ export default async function Home() {
                 <Trophy className="w-5 h-5 text-amber-400" />
               </div>
               <div>
-                <h2 className="text-base font-semibold mb-1.5">
-                  Momentum Leaderboard
-                </h2>
+                <h2 className="text-base font-semibold mb-1.5">Momentum Leaderboard</h2>
                 <p className="text-sm text-zinc-400 leading-relaxed">
-                  Ranks 60+ AI dev tools by GitHub star velocity and Hacker News
-                  activity. Open-source scoring algorithm — no black boxes.
+                  Ranks 60+ AI dev tools by GitHub star velocity and Hacker News activity.
+                  Open-source scoring algorithm — no black boxes.
                 </p>
                 <div className="flex items-center gap-3 mt-3 text-xs text-zinc-500">
                   <span className="flex items-center gap-1">
@@ -141,13 +129,10 @@ export default async function Home() {
                 <Sparkles className="w-5 h-5 text-violet-400" />
               </div>
               <div>
-                <h2 className="text-base font-semibold mb-1.5">
-                  Architecture Generator
-                </h2>
+                <h2 className="text-base font-semibold mb-1.5">Architecture Generator</h2>
                 <p className="text-sm text-zinc-400 leading-relaxed">
-                  Describe what you want to build. Get a recommended stack,
-                  Mermaid diagram, and step-by-step build plan — powered by live
-                  data.
+                  Describe what you want to build. Get a recommended stack, Mermaid
+                  diagram, and step-by-step build plan — powered by live data.
                 </p>
                 <div className="flex items-center gap-3 mt-3 text-xs text-zinc-500">
                   <span className="flex items-center gap-1">
@@ -241,9 +226,7 @@ export default async function Home() {
                       <td className="px-4 py-2.5 text-right text-sm hidden sm:table-cell tabular-nums">
                         <span
                           className={
-                            tool.starVelocity > 0
-                              ? "text-emerald-400"
-                              : "text-zinc-500"
+                            tool.starVelocity > 0 ? "text-emerald-400" : "text-zinc-500"
                           }
                         >
                           +{tool.starVelocity.toFixed(1)}/d
