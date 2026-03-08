@@ -248,7 +248,7 @@ export default async function Home() {
           <p className="text-xs text-zinc-600">
             Open-source scoring algorithm · Built in public ·{" "}
             <a
-              href="https://github.com/yourusername/ai-stack-radar"
+              href="https://github.com/aaronloh16/ai-stack-radar"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-zinc-400 transition-colors"
