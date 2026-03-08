@@ -143,6 +143,8 @@ async function updateMomentumWithHN() {
       starVelocity: latestMomentum.starVelocity,
       hnMentions7d: latestHN.mentionCount,
       hnPoints7d: latestHN.totalPoints,
+      npmDownloads7d: 0,
+      pypiDownloads7d: 0,
       overallScore: Math.round(overallScore * 100) / 100,
     });
 

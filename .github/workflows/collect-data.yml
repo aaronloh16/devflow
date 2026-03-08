@@ -30,3 +30,8 @@ jobs:
         run: npx tsx scripts/collect-hn.ts
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      - name: Collect download data
+        run: npx tsx scripts/collect-downloads.ts
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}

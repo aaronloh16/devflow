@@ -35,6 +35,8 @@ async function getLeaderboardContext(): Promise<string> {
         stars: gh?.stars ?? 0,
         starVelocity: score?.starVelocity ?? 0,
         hnMentions7d: score?.hnMentions7d ?? 0,
+        npmDownloads7d: score?.npmDownloads7d ?? 0,
+        pypiDownloads7d: score?.pypiDownloads7d ?? 0,
         overallScore: score?.overallScore ?? 0,
       };
     })
@@ -45,7 +47,7 @@ async function getLeaderboardContext(): Promise<string> {
   return toolsWithScores
     .map(
       (t) =>
-        `- ${t.name} (${t.category}): ${t.stars.toLocaleString()} stars, velocity=${t.starVelocity}/day, momentum=${t.overallScore.toFixed(1)} — ${t.description}`
+        `- ${t.name} (${t.category}): ${t.stars.toLocaleString()} stars, velocity=${t.starVelocity}/day, downloads=${((t.npmDownloads7d ?? 0) + (t.pypiDownloads7d ?? 0)).toLocaleString()}/wk, momentum=${t.overallScore.toFixed(1)} — ${t.description}`
     )
     .join("\n");
 }
