@@ -229,10 +229,15 @@ export function LeaderboardTable({ initialTools }: { initialTools: Tool[] }) {
                 <td className="px-4 py-3 text-right text-sm hidden sm:table-cell tabular-nums">
                   <span
                     className={
-                      tool.starVelocity > 0 ? "text-emerald-400" : "text-zinc-500"
+                      tool.starVelocity > 0
+                        ? "text-emerald-400"
+                        : tool.starVelocity < 0
+                          ? "text-red-400"
+                          : "text-zinc-500"
                     }
                   >
-                    +{tool.starVelocity.toFixed(1)}/d
+                    {tool.starVelocity >= 0 ? "+" : ""}
+                    {tool.starVelocity.toFixed(1)}/d
                   </span>
                 </td>
                 <td className="px-4 py-3 text-right text-sm text-zinc-400 hidden lg:table-cell tabular-nums">

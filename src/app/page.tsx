@@ -226,10 +226,15 @@ export default async function Home() {
                       <td className="px-4 py-2.5 text-right text-sm hidden sm:table-cell tabular-nums">
                         <span
                           className={
-                            tool.starVelocity > 0 ? "text-emerald-400" : "text-zinc-500"
+                            tool.starVelocity > 0
+                              ? "text-emerald-400"
+                              : tool.starVelocity < 0
+                                ? "text-red-400"
+                                : "text-zinc-500"
                           }
                         >
-                          +{tool.starVelocity.toFixed(1)}/d
+                          {tool.starVelocity >= 0 ? "+" : ""}
+                          {tool.starVelocity.toFixed(1)}/d
                         </span>
                       </td>
                       <td className="px-4 py-2.5 text-right text-sm font-semibold text-white tabular-nums">

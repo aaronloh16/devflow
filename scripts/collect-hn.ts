@@ -61,12 +61,17 @@ async function collectHNData() {
     let totalComments = 0;
     let topStoryUrl: string | null = null;
     let topStoryPoints = 0;
+    const seenIds = new Set<string>();
 
     for (const term of searchTerms) {
       try {
         const result = await searchHN(term, numericFilters);
 
         for (const hit of result.hits) {
+          // Deduplicate across search terms by objectID
+          if (seenIds.has(hit.objectID)) continue;
+          seenIds.add(hit.objectID);
+
           totalMentions++;
           totalPoints += hit.points || 0;
           totalComments += hit.num_comments || 0;

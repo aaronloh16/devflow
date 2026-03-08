@@ -1,6 +1,6 @@
 import postgres from "postgres";
 import { drizzle } from "drizzle-orm/postgres-js";
-import { eq } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 import { tools, githubSnapshots, momentumScores } from "../src/lib/schema";
 import toolsData from "../src/data/tools.json";
 
@@ -104,12 +104,12 @@ async function calculateMomentumScores() {
   console.log(`\nCalculating momentum scores...`);
 
   for (const tool of allTools) {
-    // Get latest two snapshots to calculate velocity
+    // Get latest two snapshots to calculate velocity (desc = newest first)
     const snapshots = await db
       .select()
       .from(githubSnapshots)
       .where(eq(githubSnapshots.toolId, tool.id))
-      .orderBy(githubSnapshots.collectedAt)
+      .orderBy(desc(githubSnapshots.collectedAt))
       .limit(2);
 
     if (snapshots.length < 1) continue;
@@ -117,12 +117,14 @@ async function calculateMomentumScores() {
     let starVelocity = 0;
 
     if (snapshots.length === 2) {
+      // snapshots[0] = newest, snapshots[1] = older (desc order)
+      const newer = snapshots[0];
+      const older = snapshots[1];
       const timeDiffMs =
-        new Date(snapshots[1].collectedAt).getTime() -
-        new Date(snapshots[0].collectedAt).getTime();
+        new Date(newer.collectedAt).getTime() - new Date(older.collectedAt).getTime();
       const timeDiffDays = timeDiffMs / (1000 * 60 * 60 * 24);
       if (timeDiffDays > 0) {
-        starVelocity = (snapshots[1].stars - snapshots[0].stars) / timeDiffDays;
+        starVelocity = (newer.stars - older.stars) / timeDiffDays;
       }
     }
 

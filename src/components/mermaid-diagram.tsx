@@ -2,6 +2,15 @@
 
 import { useEffect, useRef, useCallback } from "react";
 
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 export function MermaidDiagram({ chart }: { chart: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const idRef = useRef(`mermaid-${Math.random().toString(36).slice(2, 9)}`);
@@ -27,7 +36,7 @@ export function MermaidDiagram({ chart }: { chart: string }) {
     } catch (err) {
       console.error("Mermaid render error:", err);
       if (containerRef.current) {
-        containerRef.current.innerHTML = `<pre class="text-sm text-zinc-400 p-4 bg-zinc-900 rounded-lg overflow-x-auto">${chart}</pre>`;
+        containerRef.current.innerHTML = `<pre class="text-sm text-zinc-400 p-4 bg-zinc-900 rounded-lg overflow-x-auto">${escapeHtml(chart)}</pre>`;
       }
     }
   }, [chart]);
