@@ -145,6 +145,8 @@ async function calculateMomentumScores() {
       starVelocity: Math.round(starVelocity * 100) / 100,
       hnMentions7d: 0,
       hnPoints7d: 0,
+      npmDownloads7d: 0,
+      pypiDownloads7d: 0,
       overallScore: Math.round(overallScore * 100) / 100,
     });
 

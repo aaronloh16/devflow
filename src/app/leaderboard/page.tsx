@@ -40,6 +40,8 @@ async function getLeaderboardData() {
           starVelocity: latestScore?.starVelocity ?? 0,
           hnMentions7d: latestScore?.hnMentions7d ?? 0,
           hnPoints7d: latestScore?.hnPoints7d ?? 0,
+          npmDownloads7d: latestScore?.npmDownloads7d ?? 0,
+          pypiDownloads7d: latestScore?.pypiDownloads7d ?? 0,
           overallScore: latestScore?.overallScore ?? 0,
           lastUpdated: latestScore?.calculatedAt?.toISOString() ?? null,
         };

@@ -6,6 +6,7 @@ import {
   ArrowUpRight,
   Star,
   TrendingUp,
+  Download,
   ChevronUp,
   ChevronDown,
   Search,
@@ -23,11 +24,13 @@ interface Tool {
   starVelocity: number;
   hnMentions7d: number;
   hnPoints7d: number;
+  npmDownloads7d: number;
+  pypiDownloads7d: number;
   overallScore: number;
   lastUpdated: string | null;
 }
 
-type SortKey = "stars" | "starVelocity" | "hnPoints7d" | "overallScore";
+type SortKey = "stars" | "starVelocity" | "hnPoints7d" | "downloads7d" | "overallScore";
 type SortDir = "asc" | "desc";
 
 export function LeaderboardTable({ initialTools }: { initialTools: Tool[] }) {
@@ -62,6 +65,11 @@ export function LeaderboardTable({ initialTools }: { initialTools: Tool[] }) {
 
     result = [...result].sort((a, b) => {
       const mul = sortDir === "desc" ? -1 : 1;
+      if (sortKey === "downloads7d") {
+        const aVal = a.npmDownloads7d + a.pypiDownloads7d;
+        const bVal = b.npmDownloads7d + b.pypiDownloads7d;
+        return (aVal - bVal) * mul;
+      }
       return (a[sortKey] - b[sortKey]) * mul;
     });
 
@@ -168,6 +176,14 @@ export function LeaderboardTable({ initialTools }: { initialTools: Tool[] }) {
                 </span>
               </th>
               <th
+                className="text-right px-4 py-3 text-xs font-medium text-zinc-500 uppercase tracking-wider hidden lg:table-cell cursor-pointer select-none hover:text-zinc-300 transition-colors"
+                onClick={() => handleSort("downloads7d")}
+              >
+                <span className="flex items-center justify-end gap-1">
+                  <Download className="w-3 h-3" /> DLs 7d {sortIcon("downloads7d")}
+                </span>
+              </th>
+              <th
                 className="text-right px-4 py-3 text-xs font-medium text-zinc-500 uppercase tracking-wider cursor-pointer select-none hover:text-zinc-300 transition-colors"
                 onClick={() => handleSort("overallScore")}
               >
@@ -244,6 +260,15 @@ export function LeaderboardTable({ initialTools }: { initialTools: Tool[] }) {
                   {tool.hnMentions7d > 0 ? (
                     <span>
                       {tool.hnMentions7d} ({tool.hnPoints7d}pts)
+                    </span>
+                  ) : (
+                    <span className="text-zinc-600">—</span>
+                  )}
+                </td>
+                <td className="px-4 py-3 text-right text-sm text-zinc-400 hidden lg:table-cell tabular-nums">
+                  {(tool.npmDownloads7d + tool.pypiDownloads7d) > 0 ? (
+                    <span>
+                      {(tool.npmDownloads7d + tool.pypiDownloads7d).toLocaleString()}
                     </span>
                   ) : (
                     <span className="text-zinc-600">—</span>

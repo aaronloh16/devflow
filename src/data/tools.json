@@ -5,7 +5,9 @@
     "category": "llm-framework",
     "description": "Framework for developing applications powered by language models",
     "website": "https://langchain.com",
-    "hn_search_terms": ["langchain"]
+    "hn_search_terms": ["langchain"],
+    "npm_package": "langchain",
+    "pypi_package": "langchain"
   },
   {
     "name": "LlamaIndex",
@@ -13,7 +15,9 @@
     "category": "llm-framework",
     "description": "Data framework for LLM-based applications with data connectors",
     "website": "https://llamaindex.ai",
-    "hn_search_terms": ["llamaindex", "llama_index", "llama index"]
+    "hn_search_terms": ["llamaindex", "llama_index", "llama index"],
+    "npm_package": "llamaindex",
+    "pypi_package": "llama-index"
   },
   {
     "name": "Haystack",
@@ -21,7 +25,9 @@
     "category": "llm-framework",
     "description": "End-to-end LLM framework for building NLP applications",
     "website": "https://haystack.deepset.ai",
-    "hn_search_terms": ["haystack deepset", "haystack ai"]
+    "hn_search_terms": ["haystack deepset", "haystack ai"],
+    "npm_package": null,
+    "pypi_package": "haystack-ai"
   },
   {
     "name": "Semantic Kernel",
@@ -29,7 +35,9 @@
     "category": "llm-framework",
     "description": "Microsoft's SDK for integrating LLMs into applications",
     "website": "https://learn.microsoft.com/semantic-kernel",
-    "hn_search_terms": ["semantic kernel"]
+    "hn_search_terms": ["semantic kernel"],
+    "npm_package": null,
+    "pypi_package": "semantic-kernel"
   },
   {
     "name": "Vercel AI SDK",
@@ -37,7 +45,9 @@
     "category": "llm-framework",
     "description": "Build AI-powered apps with React, Svelte, Vue, and Solid",
     "website": "https://sdk.vercel.ai",
-    "hn_search_terms": ["vercel ai sdk"]
+    "hn_search_terms": ["vercel ai sdk"],
+    "npm_package": "ai",
+    "pypi_package": null
   },
   {
     "name": "ChromaDB",
@@ -45,7 +55,9 @@
     "category": "vector-db",
     "description": "Open-source embedding database for AI applications",
     "website": "https://trychroma.com",
-    "hn_search_terms": ["chromadb", "chroma db", "chroma vector"]
+    "hn_search_terms": ["chromadb", "chroma db", "chroma vector"],
+    "npm_package": "chromadb",
+    "pypi_package": "chromadb"
   },
   {
     "name": "Weaviate",
@@ -53,7 +65,9 @@
     "category": "vector-db",
     "description": "Open-source vector database for scalable AI applications",
     "website": "https://weaviate.io",
-    "hn_search_terms": ["weaviate"]
+    "hn_search_terms": ["weaviate"],
+    "npm_package": "weaviate-client",
+    "pypi_package": "weaviate-client"
   },
   {
     "name": "Qdrant",
@@ -61,7 +75,9 @@
     "category": "vector-db",
     "description": "High-performance vector similarity search engine",
     "website": "https://qdrant.tech",
-    "hn_search_terms": ["qdrant"]
+    "hn_search_terms": ["qdrant"],
+    "npm_package": "@qdrant/js-client-rest",
+    "pypi_package": "qdrant-client"
   },
   {
     "name": "Milvus",
@@ -69,7 +85,9 @@
     "category": "vector-db",
     "description": "Cloud-native vector database for scalable similarity search",
     "website": "https://milvus.io",
-    "hn_search_terms": ["milvus"]
+    "hn_search_terms": ["milvus"],
+    "npm_package": "@zilliz/milvus2-sdk-node",
+    "pypi_package": "pymilvus"
   },
   {
     "name": "pgvector",
@@ -77,7 +95,9 @@
     "category": "vector-db",
     "description": "Open-source vector similarity search for Postgres",
     "website": null,
-    "hn_search_terms": ["pgvector"]
+    "hn_search_terms": ["pgvector"],
+    "npm_package": "pgvector",
+    "pypi_package": "pgvector"
   },
   {
     "name": "LanceDB",
@@ -85,7 +105,9 @@
     "category": "vector-db",
     "description": "Serverless vector database for AI applications",
     "website": "https://lancedb.com",
-    "hn_search_terms": ["lancedb"]
+    "hn_search_terms": ["lancedb"],
+    "npm_package": "@lancedb/lancedb",
+    "pypi_package": "lancedb"
   },
   {
     "name": "Ollama",
@@ -93,7 +115,9 @@
     "category": "inference",
     "description": "Get up and running with large language models locally",
     "website": "https://ollama.com",
-    "hn_search_terms": ["ollama"]
+    "hn_search_terms": ["ollama"],
+    "npm_package": "ollama",
+    "pypi_package": "ollama"
   },
   {
     "name": "vLLM",
@@ -101,7 +125,9 @@
     "category": "inference",
     "description": "High-throughput and memory-efficient inference engine for LLMs",
     "website": "https://vllm.ai",
-    "hn_search_terms": ["vllm"]
+    "hn_search_terms": ["vllm"],
+    "npm_package": null,
+    "pypi_package": "vllm"
   },
   {
     "name": "llama.cpp",
@@ -109,7 +135,9 @@
     "category": "inference",
     "description": "LLM inference in C/C++ with minimal setup",
     "website": null,
-    "hn_search_terms": ["llama.cpp", "llama cpp"]
+    "hn_search_terms": ["llama.cpp", "llama cpp"],
+    "npm_package": null,
+    "pypi_package": null
   },
   {
     "name": "LocalAI",
@@ -117,7 +145,9 @@
     "category": "inference",
     "description": "Free, open-source OpenAI alternative running locally",
     "website": "https://localai.io",
-    "hn_search_terms": ["localai"]
+    "hn_search_terms": ["localai"],
+    "npm_package": null,
+    "pypi_package": null
   },
   {
     "name": "LM Studio",
@@ -125,7 +155,9 @@
     "category": "inference",
     "description": "Desktop app for running local LLMs",
     "website": "https://lmstudio.ai",
-    "hn_search_terms": ["lm studio", "lmstudio"]
+    "hn_search_terms": ["lm studio", "lmstudio"],
+    "npm_package": "@lmstudio/sdk",
+    "pypi_package": null
   },
   {
     "name": "CrewAI",
@@ -133,7 +165,9 @@
     "category": "agents",
     "description": "Framework for orchestrating role-playing AI agents",
     "website": "https://crewai.com",
-    "hn_search_terms": ["crewai"]
+    "hn_search_terms": ["crewai"],
+    "npm_package": null,
+    "pypi_package": "crewai"
   },
   {
     "name": "AutoGen",
@@ -141,7 +175,9 @@
     "category": "agents",
     "description": "Microsoft's framework for building multi-agent AI systems",
     "website": "https://microsoft.github.io/autogen",
-    "hn_search_terms": ["autogen microsoft", "autogen agent"]
+    "hn_search_terms": ["autogen microsoft", "autogen agent"],
+    "npm_package": null,
+    "pypi_package": "autogen-agentchat"
   },
   {
     "name": "LangGraph",
@@ -149,7 +185,9 @@
     "category": "agents",
     "description": "Build stateful, multi-actor applications with LLMs",
     "website": "https://langchain-ai.github.io/langgraph",
-    "hn_search_terms": ["langgraph"]
+    "hn_search_terms": ["langgraph"],
+    "npm_package": "@langchain/langgraph",
+    "pypi_package": "langgraph"
   },
   {
     "name": "OpenAI Swarm",
@@ -157,7 +195,9 @@
     "category": "agents",
     "description": "Educational framework for lightweight multi-agent orchestration",
     "website": null,
-    "hn_search_terms": ["openai swarm"]
+    "hn_search_terms": ["openai swarm"],
+    "npm_package": null,
+    "pypi_package": null
   },
   {
     "name": "Phidata",
@@ -165,7 +205,9 @@
     "category": "agents",
     "description": "Build AI assistants with memory, knowledge, and tools",
     "website": "https://phidata.com",
-    "hn_search_terms": ["phidata"]
+    "hn_search_terms": ["phidata"],
+    "npm_package": null,
+    "pypi_package": "phidata"
   },
   {
     "name": "Dify",
@@ -173,7 +215,9 @@
     "category": "platform",
     "description": "Open-source LLM app development platform",
     "website": "https://dify.ai",
-    "hn_search_terms": ["dify"]
+    "hn_search_terms": ["dify"],
+    "npm_package": null,
+    "pypi_package": null
   },
   {
     "name": "Flowise",
@@ -181,7 +225,9 @@
     "category": "platform",
     "description": "Drag & drop UI to build customized LLM flows",
     "website": "https://flowiseai.com",
-    "hn_search_terms": ["flowise"]
+    "hn_search_terms": ["flowise"],
+    "npm_package": "flowise",
+    "pypi_package": null
   },
   {
     "name": "n8n",
@@ -189,7 +235,9 @@
     "category": "platform",
     "description": "Workflow automation tool with AI capabilities",
     "website": "https://n8n.io",
-    "hn_search_terms": ["n8n"]
+    "hn_search_terms": ["n8n"],
+    "npm_package": "n8n",
+    "pypi_package": null
   },
   {
     "name": "Langfuse",
@@ -197,7 +245,9 @@
     "category": "observability",
     "description": "Open-source LLM engineering platform for tracing and evaluation",
     "website": "https://langfuse.com",
-    "hn_search_terms": ["langfuse"]
+    "hn_search_terms": ["langfuse"],
+    "npm_package": "langfuse",
+    "pypi_package": "langfuse"
   },
   {
     "name": "Phoenix",
@@ -205,7 +255,9 @@
     "category": "observability",
     "description": "AI observability and evaluation for LLM applications",
     "website": "https://phoenix.arize.com",
-    "hn_search_terms": ["arize phoenix"]
+    "hn_search_terms": ["arize phoenix"],
+    "npm_package": null,
+    "pypi_package": "arize-phoenix"
   },
   {
     "name": "Helicone",
@@ -213,7 +265,9 @@
     "category": "observability",
     "description": "Open-source LLM observability platform",
     "website": "https://helicone.ai",
-    "hn_search_terms": ["helicone"]
+    "hn_search_terms": ["helicone"],
+    "npm_package": "helicone",
+    "pypi_package": "helicone"
   },
   {
     "name": "Open WebUI",
@@ -221,7 +275,9 @@
     "category": "ui",
     "description": "User-friendly WebUI for LLMs, formerly Ollama WebUI",
     "website": "https://openwebui.com",
-    "hn_search_terms": ["open webui", "ollama webui"]
+    "hn_search_terms": ["open webui", "ollama webui"],
+    "npm_package": null,
+    "pypi_package": "open-webui"
   },
   {
     "name": "Lobe Chat",
@@ -229,7 +285,9 @@
     "category": "ui",
     "description": "Modern-design LLM chat framework with plugin system",
     "website": "https://lobehub.com",
-    "hn_search_terms": ["lobe chat"]
+    "hn_search_terms": ["lobe chat"],
+    "npm_package": null,
+    "pypi_package": null
   },
   {
     "name": "Jan",
@@ -237,7 +295,9 @@
     "category": "ui",
     "description": "Open-source ChatGPT alternative that runs offline",
     "website": "https://jan.ai",
-    "hn_search_terms": ["jan ai"]
+    "hn_search_terms": ["jan ai"],
+    "npm_package": null,
+    "pypi_package": null
   },
   {
     "name": "Anything LLM",
@@ -245,7 +305,9 @@
     "category": "ui",
     "description": "All-in-one AI desktop and Docker app with built-in RAG",
     "website": "https://anythingllm.com",
-    "hn_search_terms": ["anything llm", "anythingllm"]
+    "hn_search_terms": ["anything llm", "anythingllm"],
+    "npm_package": null,
+    "pypi_package": null
   },
   {
     "name": "Instructor",
@@ -253,7 +315,9 @@
     "category": "structured-output",
     "description": "Structured outputs from LLMs with validation",
     "website": "https://python.useinstructor.com",
-    "hn_search_terms": ["instructor llm", "jxnl instructor"]
+    "hn_search_terms": ["instructor llm", "jxnl instructor"],
+    "npm_package": "@instructor-ai/instructor",
+    "pypi_package": "instructor"
   },
   {
     "name": "Outlines",
@@ -261,7 +325,9 @@
     "category": "structured-output",
     "description": "Structured text generation with LLMs",
     "website": null,
-    "hn_search_terms": ["outlines llm", "outlines structured"]
+    "hn_search_terms": ["outlines llm", "outlines structured"],
+    "npm_package": null,
+    "pypi_package": "outlines"
   },
   {
     "name": "Guardrails AI",
@@ -269,7 +335,9 @@
     "category": "structured-output",
     "description": "Adding guardrails to large language models",
     "website": "https://guardrailsai.com",
-    "hn_search_terms": ["guardrails ai"]
+    "hn_search_terms": ["guardrails ai"],
+    "npm_package": null,
+    "pypi_package": "guardrails-ai"
   },
   {
     "name": "Unstructured",
@@ -277,7 +345,9 @@
     "category": "data-processing",
     "description": "Open-source components for pre-processing documents for LLMs",
     "website": "https://unstructured.io",
-    "hn_search_terms": ["unstructured io"]
+    "hn_search_terms": ["unstructured io"],
+    "npm_package": null,
+    "pypi_package": "unstructured"
   },
   {
     "name": "Docling",
@@ -285,7 +355,9 @@
     "category": "data-processing",
     "description": "IBM's document understanding and conversion library",
     "website": null,
-    "hn_search_terms": ["docling"]
+    "hn_search_terms": ["docling"],
+    "npm_package": null,
+    "pypi_package": "docling"
   },
   {
     "name": "Crawl4AI",
@@ -293,7 +365,9 @@
     "category": "data-processing",
     "description": "Open-source LLM-friendly web crawler and scraper",
     "website": "https://crawl4ai.com",
-    "hn_search_terms": ["crawl4ai"]
+    "hn_search_terms": ["crawl4ai"],
+    "npm_package": null,
+    "pypi_package": "crawl4ai"
   },
   {
     "name": "Firecrawl",
@@ -301,7 +375,9 @@
     "category": "data-processing",
     "description": "Turn websites into LLM-ready markdown or structured data",
     "website": "https://firecrawl.dev",
-    "hn_search_terms": ["firecrawl"]
+    "hn_search_terms": ["firecrawl"],
+    "npm_package": "@mendable/firecrawl-js",
+    "pypi_package": "firecrawl-py"
   },
   {
     "name": "MLflow",
@@ -309,7 +385,9 @@
     "category": "mlops",
     "description": "Open-source platform for the ML lifecycle",
     "website": "https://mlflow.org",
-    "hn_search_terms": ["mlflow"]
+    "hn_search_terms": ["mlflow"],
+    "npm_package": null,
+    "pypi_package": "mlflow"
   },
   {
     "name": "Weights & Biases",
@@ -317,7 +395,9 @@
     "category": "mlops",
     "description": "ML experiment tracking, visualization, and automation",
     "website": "https://wandb.ai",
-    "hn_search_terms": ["weights biases", "wandb"]
+    "hn_search_terms": ["weights biases", "wandb"],
+    "npm_package": null,
+    "pypi_package": "wandb"
   },
   {
     "name": "Ray",
@@ -325,7 +405,9 @@
     "category": "mlops",
     "description": "Unified framework for scaling AI and Python applications",
     "website": "https://ray.io",
-    "hn_search_terms": ["ray project", "ray anyscale"]
+    "hn_search_terms": ["ray project", "ray anyscale"],
+    "npm_package": null,
+    "pypi_package": "ray"
   },
   {
     "name": "OpenRouter",
@@ -333,7 +415,9 @@
     "category": "gateway",
     "description": "Unified API for accessing multiple LLM providers",
     "website": "https://openrouter.ai",
-    "hn_search_terms": ["openrouter"]
+    "hn_search_terms": ["openrouter"],
+    "npm_package": "@openrouter/ai-sdk-provider",
+    "pypi_package": null
   },
   {
     "name": "LiteLLM",
@@ -341,7 +425,9 @@
     "category": "gateway",
     "description": "Call 100+ LLM APIs in OpenAI format",
     "website": "https://litellm.ai",
-    "hn_search_terms": ["litellm"]
+    "hn_search_terms": ["litellm"],
+    "npm_package": null,
+    "pypi_package": "litellm"
   },
   {
     "name": "Portkey",
@@ -349,7 +435,9 @@
     "category": "gateway",
     "description": "AI gateway for reliable, fast, and secure AI app deployment",
     "website": "https://portkey.ai",
-    "hn_search_terms": ["portkey ai"]
+    "hn_search_terms": ["portkey ai"],
+    "npm_package": "portkey-ai",
+    "pypi_package": "portkey-ai"
   },
   {
     "name": "Hugging Face Transformers",
@@ -357,7 +445,9 @@
     "category": "model-library",
     "description": "State-of-the-art ML models for PyTorch, TensorFlow, and JAX",
     "website": "https://huggingface.co",
-    "hn_search_terms": ["huggingface transformers"]
+    "hn_search_terms": ["huggingface transformers"],
+    "npm_package": "@huggingface/transformers",
+    "pypi_package": "transformers"
   },
   {
     "name": "FastAPI",
@@ -365,7 +455,9 @@
     "category": "backend",
     "description": "Modern, fast web framework for building APIs with Python",
     "website": "https://fastapi.tiangolo.com",
-    "hn_search_terms": ["fastapi"]
+    "hn_search_terms": ["fastapi"],
+    "npm_package": null,
+    "pypi_package": "fastapi"
   },
   {
     "name": "Supabase",
@@ -373,7 +465,9 @@
     "category": "backend",
     "description": "Open-source Firebase alternative with Postgres",
     "website": "https://supabase.com",
-    "hn_search_terms": ["supabase"]
+    "hn_search_terms": ["supabase"],
+    "npm_package": "@supabase/supabase-js",
+    "pypi_package": "supabase"
   },
   {
     "name": "Cursor",
@@ -381,7 +475,9 @@
     "category": "dev-tools",
     "description": "AI-powered code editor built on VS Code",
     "website": "https://cursor.com",
-    "hn_search_terms": ["cursor editor", "cursor ai"]
+    "hn_search_terms": ["cursor editor", "cursor ai"],
+    "npm_package": null,
+    "pypi_package": null
   },
   {
     "name": "Continue",
@@ -389,7 +485,9 @@
     "category": "dev-tools",
     "description": "Open-source AI code assistant for VS Code and JetBrains",
     "website": "https://continue.dev",
-    "hn_search_terms": ["continue dev"]
+    "hn_search_terms": ["continue dev"],
+    "npm_package": null,
+    "pypi_package": "continuedev"
   },
   {
     "name": "Aider",
@@ -397,7 +495,9 @@
     "category": "dev-tools",
     "description": "AI pair programming in your terminal",
     "website": "https://aider.chat",
-    "hn_search_terms": ["aider"]
+    "hn_search_terms": ["aider"],
+    "npm_package": null,
+    "pypi_package": "aider-chat"
   },
   {
     "name": "E2B",
@@ -405,7 +505,9 @@
     "category": "code-execution",
     "description": "Open-source cloud runtime for AI agents",
     "website": "https://e2b.dev",
-    "hn_search_terms": ["e2b"]
+    "hn_search_terms": ["e2b"],
+    "npm_package": "@e2b/code-interpreter",
+    "pypi_package": "e2b"
   },
   {
     "name": "Model Context Protocol",
@@ -413,15 +515,19 @@
     "category": "protocols",
     "description": "Anthropic's open protocol for connecting AI to tools and data",
     "website": "https://modelcontextprotocol.io",
-    "hn_search_terms": ["model context protocol", "mcp anthropic"]
+    "hn_search_terms": ["model context protocol", "mcp anthropic"],
+    "npm_package": "@modelcontextprotocol/sdk",
+    "pypi_package": "mcp"
   },
   {
     "name": "DSPy",
     "repo": "stanfordnlp/dspy",
     "category": "llm-framework",
-    "description": "Programming—not prompting—foundation models",
+    "description": "Programming\u2014not prompting\u2014foundation models",
     "website": "https://dspy-docs.vercel.app",
-    "hn_search_terms": ["dspy"]
+    "hn_search_terms": ["dspy"],
+    "npm_package": null,
+    "pypi_package": "dspy"
   },
   {
     "name": "Mem0",
@@ -429,7 +535,9 @@
     "category": "memory",
     "description": "Memory layer for personalized AI experiences",
     "website": "https://mem0.ai",
-    "hn_search_terms": ["mem0"]
+    "hn_search_terms": ["mem0"],
+    "npm_package": null,
+    "pypi_package": "mem0ai"
   },
   {
     "name": "Ragas",
@@ -437,7 +545,9 @@
     "category": "evaluation",
     "description": "Evaluation framework for RAG pipelines",
     "website": "https://ragas.io",
-    "hn_search_terms": ["ragas"]
+    "hn_search_terms": ["ragas"],
+    "npm_package": null,
+    "pypi_package": "ragas"
   },
   {
     "name": "DeepEval",
@@ -445,7 +555,9 @@
     "category": "evaluation",
     "description": "LLM evaluation framework for unit testing LLM outputs",
     "website": "https://deepeval.com",
-    "hn_search_terms": ["deepeval"]
+    "hn_search_terms": ["deepeval"],
+    "npm_package": null,
+    "pypi_package": "deepeval"
   },
   {
     "name": "Embedchain",
@@ -453,7 +565,9 @@
     "category": "rag",
     "description": "Framework to create AI apps over any dataset",
     "website": "https://embedchain.ai",
-    "hn_search_terms": ["embedchain"]
+    "hn_search_terms": ["embedchain"],
+    "npm_package": null,
+    "pypi_package": "embedchain"
   },
   {
     "name": "RAGFlow",
@@ -461,7 +575,9 @@
     "category": "rag",
     "description": "Open-source RAG engine based on deep document understanding",
     "website": "https://ragflow.io",
-    "hn_search_terms": ["ragflow"]
+    "hn_search_terms": ["ragflow"],
+    "npm_package": null,
+    "pypi_package": null
   },
   {
     "name": "Smolagents",
@@ -469,7 +585,9 @@
     "category": "agents",
     "description": "Hugging Face's lightweight agent framework",
     "website": null,
-    "hn_search_terms": ["smolagents"]
+    "hn_search_terms": ["smolagents"],
+    "npm_package": null,
+    "pypi_package": "smolagents"
   },
   {
     "name": "Browser Use",
@@ -477,7 +595,9 @@
     "category": "agents",
     "description": "Make websites accessible for AI agents",
     "website": "https://browser-use.com",
-    "hn_search_terms": ["browser use agent", "browser-use"]
+    "hn_search_terms": ["browser use agent", "browser-use"],
+    "npm_package": null,
+    "pypi_package": "browser-use"
   },
   {
     "name": "Composio",
@@ -485,6 +605,8 @@
     "category": "agents",
     "description": "Production-ready toolset for AI agents",
     "website": "https://composio.dev",
-    "hn_search_terms": ["composio"]
+    "hn_search_terms": ["composio"],
+    "npm_package": "composio-core",
+    "pypi_package": "composio-core"
   }
 ]
