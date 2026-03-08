@@ -8,6 +8,7 @@ import { Menu, X, Github } from "lucide-react";
 const NAV_LINKS = [
   { href: "/leaderboard", label: "Leaderboard" },
   { href: "/generate", label: "Generate Stack" },
+  { href: "/analyze", label: "Stack Health" },
 ];
 
 export function NavBar() {
