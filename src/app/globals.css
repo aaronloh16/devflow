@@ -252,6 +252,25 @@ html {
 }
 
 /* ─── Noise Texture Overlay ──────────────────────────────────────────── */
+/* ─── Hover Utilities (CSS-only, safe in Server Components) ─────────── */
+.hover-text-secondary {
+  color: var(--text-tertiary);
+  transition: color 0.15s ease;
+}
+.hover-text-secondary:hover {
+  color: var(--text-secondary);
+}
+
+.home-table-row:hover {
+  background: var(--bg-surface);
+}
+.row-rank-1.home-table-row:hover,
+.row-rank-2.home-table-row:hover,
+.row-rank-3.home-table-row:hover {
+  background: unset;
+}
+
+/* ─── Noise Texture Overlay ──────────────────────────────────────────── */
 .noise-overlay {
   position: fixed;
   inset: 0;

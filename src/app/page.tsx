@@ -223,10 +223,7 @@ export default async function Home() {
               </div>
               <Link
                 href="/leaderboard"
-                className="text-xs flex items-center gap-1 transition-colors"
-                style={{ color: "var(--text-tertiary)" }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = "var(--text-secondary)")}
-                onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-tertiary)")}
+                className="hover-text-secondary text-xs flex items-center gap-1"
               >
                 View all <ArrowUpRight className="w-3 h-3" />
               </Link>
@@ -257,10 +254,8 @@ export default async function Home() {
                   {topMovers.map((tool, i) => (
                     <tr
                       key={tool.repo}
-                      className={`transition-colors ${i === 0 ? "row-rank-1" : i === 1 ? "row-rank-2" : i === 2 ? "row-rank-3" : ""}`}
+                      className={`home-table-row transition-colors ${i === 0 ? "row-rank-1" : i === 1 ? "row-rank-2" : i === 2 ? "row-rank-3" : ""}`}
                       style={{ borderBottom: i < topMovers.length - 1 ? "1px solid var(--border-subtle)" : "none" }}
-                      onMouseEnter={(e) => { if (i >= 3) (e.currentTarget as HTMLElement).style.background = "var(--bg-surface)"; }}
-                      onMouseLeave={(e) => { if (i >= 3) (e.currentTarget as HTMLElement).style.background = ""; }}
                     >
                       <td className="px-5 py-3.5">
                         {i === 0 ? (
@@ -318,10 +313,7 @@ export default async function Home() {
               href="https://github.com/aaronloh16/ai-stack-radar"
               target="_blank"
               rel="noopener noreferrer"
-              className="transition-colors"
-              style={{ color: "var(--text-tertiary)" }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "var(--text-secondary)")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-tertiary)")}
+              className="hover-text-secondary"
             >
               View source
             </a>
