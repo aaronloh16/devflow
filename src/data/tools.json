@@ -608,5 +608,85 @@
     "hn_search_terms": ["composio"],
     "npm_package": "composio-core",
     "pypi_package": "composio-core"
+  },
+  {
+    "name": "OpenClaw",
+    "repo": "openclaw/openclaw",
+    "category": "agents",
+    "description": "Open-source personal AI assistant with autonomous task execution — acquired by OpenAI",
+    "website": "https://openclaw.ai",
+    "hn_search_terms": ["openclaw", "open claw"],
+    "npm_package": null,
+    "pypi_package": null
+  },
+  {
+    "name": "OpenHands",
+    "repo": "All-Hands-AI/OpenHands",
+    "category": "dev-tools",
+    "description": "Autonomous AI coding agent for software development tasks",
+    "website": "https://www.all-hands.dev",
+    "hn_search_terms": ["openhands", "opendevin"],
+    "npm_package": null,
+    "pypi_package": null
+  },
+  {
+    "name": "Cline",
+    "repo": "cline/cline",
+    "category": "dev-tools",
+    "description": "Autonomous AI coding agent for VS Code with tool use and browser control",
+    "website": "https://cline.bot",
+    "hn_search_terms": ["cline ai", "cline vscode"],
+    "npm_package": null,
+    "pypi_package": null
+  },
+  {
+    "name": "Bolt.new",
+    "repo": "stackblitz/bolt.new",
+    "category": "platform",
+    "description": "Full-stack AI app builder with in-browser dev environment and instant deploy",
+    "website": "https://bolt.new",
+    "hn_search_terms": ["bolt.new"],
+    "npm_package": null,
+    "pypi_package": null
+  },
+  {
+    "name": "Pydantic AI",
+    "repo": "pydantic/pydantic-ai",
+    "category": "agents",
+    "description": "Type-safe agent framework from the Pydantic team with structured outputs",
+    "website": "https://ai.pydantic.dev",
+    "hn_search_terms": ["pydantic ai", "pydantic-ai"],
+    "npm_package": null,
+    "pypi_package": "pydantic-ai"
+  },
+  {
+    "name": "Mastra",
+    "repo": "mastra-ai/mastra",
+    "category": "llm-framework",
+    "description": "TypeScript AI framework for building agents, workflows, and RAG pipelines",
+    "website": "https://mastra.ai",
+    "hn_search_terms": ["mastra"],
+    "npm_package": "mastra",
+    "pypi_package": null
+  },
+  {
+    "name": "Promptfoo",
+    "repo": "promptfoo/promptfoo",
+    "category": "evaluation",
+    "description": "Test and evaluate LLM prompts, agents, and models with automated benchmarks",
+    "website": "https://promptfoo.dev",
+    "hn_search_terms": ["promptfoo"],
+    "npm_package": "promptfoo",
+    "pypi_package": null
+  },
+  {
+    "name": "Kilo Code",
+    "repo": "kilocode/kilo-code",
+    "category": "dev-tools",
+    "description": "VS Code AI assistant with structured modes and tight context handling",
+    "website": "https://kilocode.ai",
+    "hn_search_terms": ["kilo code", "kilocode"],
+    "npm_package": null,
+    "pypi_package": null
   }
 ]
