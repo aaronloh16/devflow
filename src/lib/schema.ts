@@ -108,6 +108,23 @@ export const momentumScores = pgTable(
   ]
 );
 
+export const dailyDigests = pgTable("daily_digests", {
+  id: serial("id").primaryKey(),
+  headline: text("headline").notNull(),
+  body: text("body").notNull(),
+  highlights: jsonb("highlights")
+    .$type<
+      Array<{
+        tool: string;
+        repo: string;
+        delta: string;
+        reason: string;
+      }>
+    >()
+    .notNull(),
+  generatedAt: timestamp("generated_at").defaultNow().notNull(),
+});
+
 export const sharedStacks = pgTable("shared_stacks", {
   id: text("id").primaryKey(), // nanoid
   prompt: text("prompt").notNull(),

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Trophy, Sparkles, ArrowUpRight, Star, Radio, Zap } from "lucide-react";
+import { Trophy, Sparkles, ArrowUpRight, Star, Radio, Zap, Newspaper, TrendingUp, TrendingDown, Minus } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -9,6 +9,18 @@ interface TopMover {
   stars: number;
   starVelocity: number;
   overallScore: number;
+}
+
+interface DailyDigest {
+  headline: string;
+  body: string;
+  highlights: Array<{
+    tool: string;
+    repo: string;
+    delta: string;
+    reason: string;
+  }>;
+  generatedAt: Date;
 }
 
 async function getTopMovers(): Promise<TopMover[]> {
@@ -52,8 +64,34 @@ async function getTopMovers(): Promise<TopMover[]> {
   }
 }
 
+async function getLatestDigest(): Promise<DailyDigest | null> {
+  try {
+    const { db } = await import("@/lib/db");
+    const { dailyDigests } = await import("@/lib/schema");
+    const { desc } = await import("drizzle-orm");
+
+    const [latest] = await db
+      .select()
+      .from(dailyDigests)
+      .orderBy(desc(dailyDigests.generatedAt))
+      .limit(1);
+
+    if (!latest) return null;
+
+    return {
+      headline: latest.headline,
+      body: latest.body,
+      highlights: latest.highlights,
+      generatedAt: latest.generatedAt,
+    };
+  } catch {
+    return null;
+  }
+}
+
 export default async function Home() {
   const topMovers = await getTopMovers();
+  const digest = await getLatestDigest();
 
   return (
     <div className="relative overflow-hidden">
@@ -207,6 +245,83 @@ export default async function Home() {
             </div>
           </Link>
         </div>
+
+        {/* Daily Digest */}
+        {digest && (
+          <div className="mb-20 delay-350 animate-fade-in-up">
+            <div className="flex items-center gap-2.5 mb-5">
+              <Newspaper className="w-4 h-4" style={{ color: "var(--accent-cyan)" }} />
+              <span
+                className="text-xs font-semibold uppercase tracking-widest"
+                style={{ color: "var(--text-secondary)", fontFamily: "var(--font-syne), sans-serif", letterSpacing: "0.12em" }}
+              >
+                Today&apos;s Pulse
+              </span>
+              <span className="text-[10px] ml-auto" style={{ color: "var(--text-tertiary)" }}>
+                {new Date(digest.generatedAt).toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                })}
+              </span>
+            </div>
+
+            <div className="card p-6 space-y-4">
+              <h3
+                className="text-lg font-bold leading-snug"
+                style={{ fontFamily: "var(--font-syne), sans-serif", color: "var(--text-primary)" }}
+              >
+                {digest.headline}
+              </h3>
+
+              <div className="text-sm leading-relaxed space-y-3" style={{ color: "var(--text-secondary)" }}>
+                {digest.body.split("\n\n").map((paragraph, i) => (
+                  <p key={i}>{paragraph}</p>
+                ))}
+              </div>
+
+              {/* Highlight chips */}
+              <div className="flex flex-wrap gap-2 pt-2">
+                {digest.highlights.map((h) => {
+                  const isPositive = h.delta.startsWith("+");
+                  const isNegative = h.delta.startsWith("-");
+                  return (
+                    <a
+                      key={h.repo}
+                      href={`https://github.com/${h.repo}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group/chip inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs transition-colors"
+                      style={{
+                        background: "var(--bg-surface)",
+                        border: "1px solid var(--border-subtle)",
+                      }}
+                    >
+                      {isPositive ? (
+                        <TrendingUp className="w-3 h-3" style={{ color: "var(--accent-green)" }} />
+                      ) : isNegative ? (
+                        <TrendingDown className="w-3 h-3" style={{ color: "var(--accent-red)" }} />
+                      ) : (
+                        <Minus className="w-3 h-3" style={{ color: "var(--text-tertiary)" }} />
+                      )}
+                      <span className="font-medium" style={{ color: "var(--text-primary)" }}>{h.tool}</span>
+                      <span
+                        className="font-mono"
+                        style={{
+                          color: isPositive ? "var(--accent-green)" : isNegative ? "var(--accent-red)" : "var(--text-tertiary)",
+                          fontFamily: "var(--font-jetbrains-mono), monospace",
+                        }}
+                      >
+                        {h.delta}
+                      </span>
+                      <ArrowUpRight className="w-3 h-3 opacity-0 group-hover/chip:opacity-100 transition-opacity" style={{ color: "var(--text-tertiary)" }} />
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Top Movers preview */}
         {topMovers.length > 0 && (

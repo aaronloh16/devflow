@@ -35,3 +35,9 @@ jobs:
         run: npx tsx scripts/collect-downloads.ts
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      - name: Generate daily digest
+        run: npx tsx scripts/generate-digest.ts
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
