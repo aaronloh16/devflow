@@ -27,18 +27,26 @@ export type ToolWithMetrics = {
  * Uses DISTINCT ON to get latest row per tool in a single query each,
  * replacing the N+1 pattern (121 queries → 3 queries).
  */
+type ScoreRow = {
+  tool_id: number;
+  star_velocity: number;
+  hn_mentions_7d: number;
+  hn_points_7d: number;
+  npm_downloads_7d: number;
+  pypi_downloads_7d: number;
+  overall_score: number;
+  calculated_at: Date;
+};
+
+type GHRow = {
+  tool_id: number;
+  stars: number;
+  forks: number;
+};
+
 export async function getToolsWithLatestMetrics(): Promise<ToolWithMetrics[]> {
   // Latest momentum score per tool (1 query)
-  const latestScores = await db.execute<{
-    tool_id: number;
-    star_velocity: number;
-    hn_mentions_7d: number;
-    hn_points_7d: number;
-    npm_downloads_7d: number;
-    pypi_downloads_7d: number;
-    overall_score: number;
-    calculated_at: Date;
-  }>(sql`
+  const latestScores: ScoreRow[] = await db.execute(sql`
     SELECT DISTINCT ON (tool_id)
       tool_id, star_velocity, hn_mentions_7d, hn_points_7d,
       npm_downloads_7d, pypi_downloads_7d, overall_score, calculated_at
@@ -47,11 +55,7 @@ export async function getToolsWithLatestMetrics(): Promise<ToolWithMetrics[]> {
   `);
 
   // Latest GitHub snapshot per tool (1 query)
-  const latestGH = await db.execute<{
-    tool_id: number;
-    stars: number;
-    forks: number;
-  }>(sql`
+  const latestGH: GHRow[] = await db.execute(sql`
     SELECT DISTINCT ON (tool_id)
       tool_id, stars, forks
     FROM github_snapshots
@@ -62,8 +66,8 @@ export async function getToolsWithLatestMetrics(): Promise<ToolWithMetrics[]> {
   const allTools = await db.select().from(tools);
 
   // Index by toolId for O(1) lookups
-  const scoresByToolId = new Map(latestScores.rows.map((s) => [s.tool_id, s]));
-  const ghByToolId = new Map(latestGH.rows.map((g) => [g.tool_id, g]));
+  const scoresByToolId = new Map(latestScores.map((s) => [s.tool_id, s]));
+  const ghByToolId = new Map(latestGH.map((g) => [g.tool_id, g]));
 
   return allTools.map((tool) => {
     const score = scoresByToolId.get(tool.id);
