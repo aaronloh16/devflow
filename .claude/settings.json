@@ -12,5 +12,48 @@
       "Bash(cat:*)",
       "Bash(ls:*)"
     ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/block-dangerous.sh",
+            "statusMessage": "Checking for dangerous commands..."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/lint-fix.sh",
+            "statusMessage": "Auto-formatting..."
+          },
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/duplicate-query-guard.sh",
+            "statusMessage": "Checking for duplicate query patterns..."
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/typecheck.sh",
+            "timeout": 60,
+            "statusMessage": "Running build type-check..."
+          }
+        ]
+      }
+    ]
   }
 }

@@ -1,21 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
-import { db } from "@/lib/db";
-import { tools, momentumScores, githubSnapshots } from "@/lib/schema";
-import { desc, eq } from "drizzle-orm";
-import {
-  validateMermaidSyntax,
-  stripMermaidCodeFences,
-} from "@/lib/mermaid-validate";
+import { validateMermaidSyntax, stripMermaidCodeFences } from "@/lib/mermaid-validate";
+import { getToolsWithLatestMetrics } from "@/lib/queries";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
 const anthropic = new Anthropic();
 
-function parseGitHubUrl(
-  url: string
-): { owner: string; repo: string } | null {
+function parseGitHubUrl(url: string): { owner: string; repo: string } | null {
   const match = url.match(
     /(?:https?:\/\/)?(?:www\.)?github\.com\/([^/\s]+)\/([^/\s#?]+)/
   );
@@ -85,9 +78,7 @@ function extractPyprojectDeps(pyprojectToml: string): string[] {
     }
   }
   // Also check for array-style dependencies
-  const arrayMatch = pyprojectToml.match(
-    /dependencies\s*=\s*\[([\s\S]*?)\]/
-  );
+  const arrayMatch = pyprojectToml.match(/dependencies\s*=\s*\[([\s\S]*?)\]/);
   if (arrayMatch) {
     for (const match of arrayMatch[1].matchAll(/"([^"]+)"|'([^']+)'/g)) {
       const dep = (match[1] || match[2]).split(/[=<>!~[\s]/)[0].toLowerCase();
@@ -105,8 +96,7 @@ const ANALYSIS_TOOL: Anthropic.Tool = {
     properties: {
       summary: {
         type: "string",
-        description:
-          "2-3 sentence overview of the project's tech stack and its health",
+        description: "2-3 sentence overview of the project's tech stack and its health",
       },
       overallHealthScore: {
         type: "number",
@@ -153,8 +143,7 @@ const ANALYSIS_TOOL: Anthropic.Tool = {
             },
             reason: {
               type: "string",
-              description:
-                "Why this change is recommended, referencing momentum data",
+              description: "Why this change is recommended, referencing momentum data",
             },
           },
           required: ["current", "suggested", "reason"],
@@ -182,10 +171,7 @@ export async function POST(request: NextRequest) {
     const { repoUrl } = await request.json();
 
     if (!repoUrl || typeof repoUrl !== "string") {
-      return NextResponse.json(
-        { error: "GitHub repo URL is required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "GitHub repo URL is required" }, { status: 400 });
     }
 
     const parsed = parseGitHubUrl(repoUrl);
@@ -219,35 +205,8 @@ export async function POST(request: NextRequest) {
     if (requirementsTxt) allDeps.push(...extractPythonDeps(requirementsTxt));
     if (pyprojectToml) allDeps.push(...extractPyprojectDeps(pyprojectToml));
 
-    // Get all tools with their momentum data
-    const allTools = await db.select().from(tools);
-    const toolsWithScores = await Promise.all(
-      allTools.map(async (tool) => {
-        const [score] = await db
-          .select()
-          .from(momentumScores)
-          .where(eq(momentumScores.toolId, tool.id))
-          .orderBy(desc(momentumScores.calculatedAt))
-          .limit(1);
-
-        const [gh] = await db
-          .select()
-          .from(githubSnapshots)
-          .where(eq(githubSnapshots.toolId, tool.id))
-          .orderBy(desc(githubSnapshots.collectedAt))
-          .limit(1);
-
-        return {
-          name: tool.name,
-          category: tool.category,
-          description: tool.description,
-          repo: tool.repo,
-          stars: gh?.stars ?? 0,
-          starVelocity: score?.starVelocity ?? 0,
-          overallScore: score?.overallScore ?? 0,
-        };
-      })
-    );
+    // Get all tools with their momentum data (3 queries instead of ~121)
+    const toolsWithScores = await getToolsWithLatestMetrics();
 
     const leaderboardContext = toolsWithScores
       .sort((a, b) => b.overallScore - a.overallScore)
@@ -342,9 +301,6 @@ Rules: Quote node labels with special characters. No classDef in subgraph declar
     return NextResponse.json({ result });
   } catch (error) {
     console.error("Analyze repo error:", error);
-    return NextResponse.json(
-      { error: "Failed to analyze repository" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to analyze repository" }, { status: 500 });
   }
 }
