@@ -14,26 +14,24 @@ export interface EssentialsCategory {
   tools: EssentialTool[];
 }
 
-export const TIER_META: Record<
-  Tier,
-  { label: string; color: string; bgColor: string }
-> = {
-  essential: {
-    label: "Essential",
-    color: "text-emerald-400",
-    bgColor: "bg-emerald-500/15",
-  },
-  rising: {
-    label: "Rising",
-    color: "text-amber-400",
-    bgColor: "bg-amber-500/15",
-  },
-  "worth-watching": {
-    label: "Worth Watching",
-    color: "text-zinc-400",
-    bgColor: "bg-zinc-500/15",
-  },
-};
+export const TIER_META: Record<Tier, { label: string; color: string; bgColor: string }> =
+  {
+    essential: {
+      label: "Essential",
+      color: "text-emerald-400",
+      bgColor: "bg-emerald-500/15",
+    },
+    rising: {
+      label: "Rising",
+      color: "text-amber-400",
+      bgColor: "bg-amber-500/15",
+    },
+    "worth-watching": {
+      label: "Worth Watching",
+      color: "text-zinc-400",
+      bgColor: "bg-zinc-500/15",
+    },
+  };
 
 export const ESSENTIALS_CATEGORIES: EssentialsCategory[] = [
   {
@@ -82,16 +80,14 @@ export const ESSENTIALS_CATEGORIES: EssentialsCategory[] = [
       },
       {
         name: "Aider",
-        description:
-          "AI pair programming in your terminal — works with any LLM provider",
+        description: "AI pair programming in your terminal — works with any LLM provider",
         tier: "rising",
         url: "https://aider.chat",
         repo: "paul-gauthier/aider",
       },
       {
         name: "Continue",
-        description:
-          "Open-source AI code assistant for VS Code and JetBrains",
+        description: "Open-source AI code assistant for VS Code and JetBrains",
         tier: "worth-watching",
         url: "https://continue.dev",
         repo: "continuedev/continue",
@@ -182,27 +178,54 @@ export const ESSENTIALS_CATEGORIES: EssentialsCategory[] = [
       },
       {
         name: "Browser Use",
-        description:
-          "Make AI agents interact with websites using natural language",
+        description: "Make AI agents interact with websites using natural language",
         tier: "rising",
         url: "https://browser-use.com",
         repo: "browser-use/browser-use",
       },
       {
         name: "Stagehand",
-        description:
-          "AI-powered browser automation framework for building web agents",
+        description: "AI-powered browser automation framework for building web agents",
         tier: "rising",
         url: "https://stagehand.dev",
         repo: "browserbasehq/stagehand",
       },
       {
         name: "SWE-agent",
-        description:
-          "Princeton's agent for automatically resolving GitHub issues",
+        description: "Princeton's agent for automatically resolving GitHub issues",
         tier: "worth-watching",
         url: "https://swe-agent.com",
         repo: "SWE-agent/SWE-agent",
+      },
+    ],
+  },
+  {
+    id: "tool-orchestration",
+    label: "Tool Orchestration & Integration",
+    tools: [
+      {
+        name: "Composio",
+        description:
+          "Integration platform with 250+ tool connections for AI agents — auth, actions, and triggers out of the box",
+        tier: "essential",
+        url: "https://composio.dev",
+        repo: "ComposioHQ/composio",
+      },
+      {
+        name: "Agent Orchestrator",
+        description:
+          "Parallel AI coding agents with git worktrees, tmux sessions, and auto CI-fix — by Composio",
+        tier: "essential",
+        url: "https://github.com/ComposioHQ/agent-orchestrator",
+        repo: "ComposioHQ/agent-orchestrator",
+      },
+      {
+        name: "Awesome Claude Skills",
+        description:
+          "Community-curated collection of Claude Code custom skills — 43K+ GitHub stars",
+        tier: "rising",
+        url: "https://github.com/anthropics/awesome-claude-skills",
+        repo: "anthropics/awesome-claude-skills",
       },
     ],
   },
@@ -220,8 +243,7 @@ export const ESSENTIALS_CATEGORIES: EssentialsCategory[] = [
       },
       {
         name: "CrewAI",
-        description:
-          "Framework for orchestrating role-playing autonomous AI agents",
+        description: "Framework for orchestrating role-playing autonomous AI agents",
         tier: "essential",
         url: "https://crewai.com",
         repo: "crewAIInc/crewAI",
@@ -260,8 +282,7 @@ export const ESSENTIALS_CATEGORIES: EssentialsCategory[] = [
       },
       {
         name: "Smolagents",
-        description:
-          "Hugging Face's lightweight library for building capable AI agents",
+        description: "Hugging Face's lightweight library for building capable AI agents",
         tier: "worth-watching",
         url: "https://huggingface.co/docs/smolagents",
         repo: "huggingface/smolagents",
@@ -290,8 +311,7 @@ export const ESSENTIALS_CATEGORIES: EssentialsCategory[] = [
       },
       {
         name: "Vercel AI SDK",
-        description:
-          "TypeScript toolkit for building AI-powered streaming UIs",
+        description: "TypeScript toolkit for building AI-powered streaming UIs",
         tier: "essential",
         url: "https://sdk.vercel.ai",
         repo: "vercel/ai",
@@ -322,8 +342,7 @@ export const ESSENTIALS_CATEGORIES: EssentialsCategory[] = [
       },
       {
         name: "Haystack",
-        description:
-          "End-to-end NLP framework for building search and RAG pipelines",
+        description: "End-to-end NLP framework for building search and RAG pipelines",
         tier: "worth-watching",
         url: "https://haystack.deepset.ai",
         repo: "deepset-ai/haystack",
@@ -336,32 +355,28 @@ export const ESSENTIALS_CATEGORIES: EssentialsCategory[] = [
     tools: [
       {
         name: "Ollama",
-        description:
-          "Run large language models locally with a simple CLI interface",
+        description: "Run large language models locally with a simple CLI interface",
         tier: "essential",
         url: "https://ollama.ai",
         repo: "ollama/ollama",
       },
       {
         name: "vLLM",
-        description:
-          "High-throughput LLM serving engine with PagedAttention",
+        description: "High-throughput LLM serving engine with PagedAttention",
         tier: "rising",
         url: "https://vllm.ai",
         repo: "vllm-project/vllm",
       },
       {
         name: "llama.cpp",
-        description:
-          "LLM inference in C/C++ — runs models on consumer hardware",
+        description: "LLM inference in C/C++ — runs models on consumer hardware",
         tier: "rising",
         url: "https://github.com/ggerganov/llama.cpp",
         repo: "ggerganov/llama.cpp",
       },
       {
         name: "SGLang",
-        description:
-          "High-performance LLM serving framework used by xAI and Azure",
+        description: "High-performance LLM serving framework used by xAI and Azure",
         tier: "rising",
         url: "https://github.com/sgl-project/sglang",
         repo: "sgl-project/sglang",
@@ -376,16 +391,14 @@ export const ESSENTIALS_CATEGORIES: EssentialsCategory[] = [
       },
       {
         name: "LocalAI",
-        description:
-          "OpenAI-compatible local API for running models without GPU",
+        description: "OpenAI-compatible local API for running models without GPU",
         tier: "worth-watching",
         url: "https://localai.io",
         repo: "mudler/LocalAI",
       },
       {
         name: "Llamafile",
-        description:
-          "Run LLMs from a single executable file, backed by Mozilla",
+        description: "Run LLMs from a single executable file, backed by Mozilla",
         tier: "worth-watching",
         url: "https://github.com/Mozilla-Ocho/llamafile",
         repo: "Mozilla-Ocho/llamafile",
@@ -406,24 +419,21 @@ export const ESSENTIALS_CATEGORIES: EssentialsCategory[] = [
     tools: [
       {
         name: "pgvector",
-        description:
-          "Vector similarity search extension for PostgreSQL",
+        description: "Vector similarity search extension for PostgreSQL",
         tier: "essential",
         url: "https://github.com/pgvector/pgvector",
         repo: "pgvector/pgvector",
       },
       {
         name: "ChromaDB",
-        description:
-          "Open-source embedding database for AI applications",
+        description: "Open-source embedding database for AI applications",
         tier: "essential",
         url: "https://trychroma.com",
         repo: "chroma-core/chroma",
       },
       {
         name: "Qdrant",
-        description:
-          "High-performance vector similarity search engine with filtering",
+        description: "High-performance vector similarity search engine with filtering",
         tier: "rising",
         url: "https://qdrant.tech",
         repo: "qdrant/qdrant",
@@ -446,16 +456,14 @@ export const ESSENTIALS_CATEGORIES: EssentialsCategory[] = [
       },
       {
         name: "Milvus",
-        description:
-          "Cloud-native vector database for scalable similarity search",
+        description: "Cloud-native vector database for scalable similarity search",
         tier: "worth-watching",
         url: "https://milvus.io",
         repo: "milvus-io/milvus",
       },
       {
         name: "LanceDB",
-        description:
-          "Serverless vector database built on Lance columnar format",
+        description: "Serverless vector database built on Lance columnar format",
         tier: "worth-watching",
         url: "https://lancedb.com",
         repo: "lancedb/lancedb",
@@ -476,16 +484,14 @@ export const ESSENTIALS_CATEGORIES: EssentialsCategory[] = [
       },
       {
         name: "Weights & Biases",
-        description:
-          "ML experiment tracking, model management, and dataset versioning",
+        description: "ML experiment tracking, model management, and dataset versioning",
         tier: "rising",
         url: "https://wandb.ai",
         repo: "wandb/wandb",
       },
       {
         name: "Ragas",
-        description:
-          "Evaluation framework for Retrieval Augmented Generation pipelines",
+        description: "Evaluation framework for Retrieval Augmented Generation pipelines",
         tier: "rising",
         url: "https://ragas.io",
         repo: "explodinggradients/ragas",
@@ -516,16 +522,14 @@ export const ESSENTIALS_CATEGORIES: EssentialsCategory[] = [
       },
       {
         name: "DeepEval",
-        description:
-          "Unit testing framework for evaluating LLM outputs",
+        description: "Unit testing framework for evaluating LLM outputs",
         tier: "worth-watching",
         url: "https://deepeval.com",
         repo: "confident-ai/deepeval",
       },
       {
         name: "OpenLLMetry",
-        description:
-          "OpenTelemetry-based instrumentation for LLM applications",
+        description: "OpenTelemetry-based instrumentation for LLM applications",
         tier: "worth-watching",
         url: "https://traceloop.com",
         repo: "traceloop/openllmetry",
@@ -538,24 +542,21 @@ export const ESSENTIALS_CATEGORIES: EssentialsCategory[] = [
     tools: [
       {
         name: "Firecrawl",
-        description:
-          "Turn websites into LLM-ready markdown or structured data via API",
+        description: "Turn websites into LLM-ready markdown or structured data via API",
         tier: "essential",
         url: "https://firecrawl.dev",
         repo: "mendableai/firecrawl",
       },
       {
         name: "Unstructured",
-        description:
-          "ETL toolkit for preprocessing documents, images, and HTML for LLMs",
+        description: "ETL toolkit for preprocessing documents, images, and HTML for LLMs",
         tier: "essential",
         url: "https://unstructured.io",
         repo: "Unstructured-IO/unstructured",
       },
       {
         name: "Crawl4AI",
-        description:
-          "Open-source web crawler optimized for AI data extraction",
+        description: "Open-source web crawler optimized for AI data extraction",
         tier: "rising",
         url: "https://crawl4ai.com",
         repo: "unclecode/crawl4ai",
@@ -578,16 +579,14 @@ export const ESSENTIALS_CATEGORIES: EssentialsCategory[] = [
       },
       {
         name: "RAGFlow",
-        description:
-          "Open-source RAG engine with deep document understanding",
+        description: "Open-source RAG engine with deep document understanding",
         tier: "worth-watching",
         url: "https://ragflow.io",
         repo: "infiniflow/ragflow",
       },
       {
         name: "Embedchain",
-        description:
-          "Framework for creating RAG bots over any data source",
+        description: "Framework for creating RAG bots over any data source",
         tier: "worth-watching",
         url: "https://embedchain.ai",
         repo: "embedchain/embedchain",
@@ -600,16 +599,14 @@ export const ESSENTIALS_CATEGORIES: EssentialsCategory[] = [
     tools: [
       {
         name: "Dify",
-        description:
-          "Open-source platform for building LLM apps with visual workflows",
+        description: "Open-source platform for building LLM apps with visual workflows",
         tier: "essential",
         url: "https://dify.ai",
         repo: "langgenius/dify",
       },
       {
         name: "n8n",
-        description:
-          "Workflow automation platform with 400+ integrations and AI nodes",
+        description: "Workflow automation platform with 400+ integrations and AI nodes",
         tier: "essential",
         url: "https://n8n.io",
         repo: "n8n-io/n8n",
@@ -624,8 +621,7 @@ export const ESSENTIALS_CATEGORIES: EssentialsCategory[] = [
       },
       {
         name: "Langflow",
-        description:
-          "Visual AI workflow builder with drag-and-drop components",
+        description: "Visual AI workflow builder with drag-and-drop components",
         tier: "rising",
         url: "https://langflow.org",
         repo: "langflow-ai/langflow",
@@ -638,24 +634,21 @@ export const ESSENTIALS_CATEGORIES: EssentialsCategory[] = [
     tools: [
       {
         name: "Instructor",
-        description:
-          "Extract structured data from LLMs with validation via Pydantic",
+        description: "Extract structured data from LLMs with validation via Pydantic",
         tier: "essential",
         url: "https://instructor-ai.github.io/instructor/",
         repo: "instructor-ai/instructor",
       },
       {
         name: "Outlines",
-        description:
-          "Structured text generation with guaranteed JSON output from LLMs",
+        description: "Structured text generation with guaranteed JSON output from LLMs",
         tier: "rising",
         url: "https://outlines-dev.github.io/outlines/",
         repo: "outlines-dev/outlines",
       },
       {
         name: "Guardrails AI",
-        description:
-          "Add validation, guardrails, and corrective actions to LLM outputs",
+        description: "Add validation, guardrails, and corrective actions to LLM outputs",
         tier: "worth-watching",
         url: "https://guardrailsai.com",
         repo: "guardrails-ai/guardrails",
@@ -668,24 +661,21 @@ export const ESSENTIALS_CATEGORIES: EssentialsCategory[] = [
     tools: [
       {
         name: "OpenRouter",
-        description:
-          "Unified API for 200+ LLMs with automatic fallback and routing",
+        description: "Unified API for 200+ LLMs with automatic fallback and routing",
         tier: "essential",
         url: "https://openrouter.ai",
         repo: null,
       },
       {
         name: "LiteLLM",
-        description:
-          "Call 100+ LLM APIs in OpenAI-compatible format with load balancing",
+        description: "Call 100+ LLM APIs in OpenAI-compatible format with load balancing",
         tier: "essential",
         url: "https://litellm.ai",
         repo: "BerriAI/litellm",
       },
       {
         name: "Portkey",
-        description:
-          "AI gateway with caching, fallbacks, and observability for LLM apps",
+        description: "AI gateway with caching, fallbacks, and observability for LLM apps",
         tier: "rising",
         url: "https://portkey.ai",
         repo: "Portkey-AI/gateway",
@@ -712,24 +702,21 @@ export const ESSENTIALS_CATEGORIES: EssentialsCategory[] = [
     tools: [
       {
         name: "Letta",
-        description:
-          "Stateful agent platform with persistent memory, formerly MemGPT",
+        description: "Stateful agent platform with persistent memory, formerly MemGPT",
         tier: "essential",
         url: "https://letta.com",
         repo: "letta-ai/letta",
       },
       {
         name: "Mem0",
-        description:
-          "Memory layer for AI assistants — adds persistent personalization",
+        description: "Memory layer for AI assistants — adds persistent personalization",
         tier: "rising",
         url: "https://mem0.ai",
         repo: "mem0ai/mem0",
       },
       {
         name: "Zep",
-        description:
-          "Memory and knowledge graph platform for AI agents and assistants",
+        description: "Memory and knowledge graph platform for AI agents and assistants",
         tier: "rising",
         url: "https://getzep.com",
         repo: "getzep/zep",
@@ -742,8 +729,7 @@ export const ESSENTIALS_CATEGORIES: EssentialsCategory[] = [
     tools: [
       {
         name: "E2B",
-        description:
-          "Cloud sandboxes for running AI-generated code securely",
+        description: "Cloud sandboxes for running AI-generated code securely",
         tier: "rising",
         url: "https://e2b.dev",
         repo: "e2b-dev/E2B",
@@ -756,24 +742,21 @@ export const ESSENTIALS_CATEGORIES: EssentialsCategory[] = [
     tools: [
       {
         name: "Pipecat",
-        description:
-          "Open-source framework for voice and multimodal conversational AI",
+        description: "Open-source framework for voice and multimodal conversational AI",
         tier: "essential",
         url: "https://pipecat.ai",
         repo: "pipecat-ai/pipecat",
       },
       {
         name: "LiveKit Agents",
-        description:
-          "Framework for building realtime AI agents with voice and video",
+        description: "Framework for building realtime AI agents with voice and video",
         tier: "rising",
         url: "https://livekit.io",
         repo: "livekit/agents",
       },
       {
         name: "ElevenLabs",
-        description:
-          "Voice AI platform with lifelike speech synthesis in 30+ languages",
+        description: "Voice AI platform with lifelike speech synthesis in 30+ languages",
         tier: "rising",
         url: "https://elevenlabs.io",
         repo: null,
@@ -786,8 +769,7 @@ export const ESSENTIALS_CATEGORIES: EssentialsCategory[] = [
     tools: [
       {
         name: "Open WebUI",
-        description:
-          "Self-hosted WebUI for LLMs with plugin system and RAG support",
+        description: "Self-hosted WebUI for LLMs with plugin system and RAG support",
         tier: "essential",
         url: "https://openwebui.com",
         repo: "open-webui/open-webui",
@@ -802,8 +784,7 @@ export const ESSENTIALS_CATEGORIES: EssentialsCategory[] = [
       },
       {
         name: "Streamlit",
-        description:
-          "Python framework for building data apps and AI prototypes",
+        description: "Python framework for building data apps and AI prototypes",
         tier: "rising",
         url: "https://streamlit.io",
         repo: "streamlit/streamlit",

@@ -11,27 +11,18 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "collect:github": "tsx scripts/collect-github.ts",
-    "collect:hn": "tsx scripts/collect-hn.ts",
-    "collect:downloads": "tsx scripts/collect-downloads.ts",
-    "collect:all": "tsx scripts/collect-github.ts && tsx scripts/collect-hn.ts && tsx scripts/collect-downloads.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run",
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.39.0",
-    "@google/genai": "^1.44.0",
     "drizzle-orm": "^0.39.3",
     "lucide-react": "^0.474.0",
-    "mermaid": "^11.4.1",
-    "nanoid": "^5.0.9",
     "next": "^16.1.6",
     "postgres": "^3.4.5",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "svg-pan-zoom": "^3.6.2"
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.5",

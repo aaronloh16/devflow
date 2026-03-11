@@ -878,5 +878,15 @@
     "hn_search_terms": ["open webui pipelines"],
     "npm_package": null,
     "pypi_package": null
+  },
+  {
+    "name": "Agent Orchestrator",
+    "repo": "ComposioHQ/agent-orchestrator",
+    "category": "agents",
+    "description": "Parallel AI coding agents with git worktrees, tmux sessions, and auto CI-fix — by Composio",
+    "website": "https://github.com/ComposioHQ/agent-orchestrator",
+    "hn_search_terms": ["agent orchestrator composio"],
+    "npm_package": null,
+    "pypi_package": null
   }
 ]

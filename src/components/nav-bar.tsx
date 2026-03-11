@@ -7,9 +7,8 @@ import { Menu, X, Github, Workflow } from "lucide-react";
 
 const NAV_LINKS = [
   { href: "/workflows", label: "Workflows" },
-  { href: "/leaderboard", label: "Tools" },
+  { href: "/leaderboard", label: "Builder's Picks" },
   { href: "/submit", label: "Submit" },
-  { href: "/generate", label: "Generate" },
 ];
 
 export function NavBar() {
@@ -76,12 +75,10 @@ export function NavBar() {
             className="ml-2 p-2 rounded-lg transition-colors"
             style={{ color: "var(--text-tertiary)" }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.color =
-                "var(--text-secondary)";
+              (e.currentTarget as HTMLElement).style.color = "var(--text-secondary)";
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.color =
-                "var(--text-tertiary)";
+              (e.currentTarget as HTMLElement).style.color = "var(--text-tertiary)";
             }}
           >
             <Github className="w-4 h-4" />

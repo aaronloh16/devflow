@@ -121,9 +121,8 @@ export default async function Home() {
           className="text-base max-w-lg leading-relaxed mb-8"
           style={{ color: "var(--text-secondary)" }}
         >
-          The real tool stacks, prompts, and daily setups behind the
-          engineers shipping 10x faster — from parallel AI agents to
-          production prompting techniques.
+          The real tool stacks, prompts, and daily setups behind the engineers shipping
+          10x faster — from parallel AI agents to production prompting techniques.
         </p>
         <div className="flex gap-3">
           <Link
@@ -237,8 +236,8 @@ export default async function Home() {
               className="text-sm max-w-md mx-auto mb-8 leading-relaxed"
               style={{ color: "var(--text-secondary)" }}
             >
-              We&rsquo;re collecting the real AI setups and techniques from
-              engineers at top companies. Be the first to share how you ship.
+              We&rsquo;re collecting the real AI setups and techniques from engineers at
+              top companies. Be the first to share how you ship.
             </p>
             <Link
               href="/submit"
@@ -267,7 +266,7 @@ export default async function Home() {
                 href="/leaderboard"
                 className="text-xs flex items-center gap-1 transition-colors hover-text-secondary"
               >
-                All tools <ArrowRight className="w-3 h-3" />
+                Builder&rsquo;s Picks <ArrowRight className="w-3 h-3" />
               </Link>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
@@ -302,10 +301,10 @@ export default async function Home() {
         </>
       )}
 
-      {/* Generate Stack CTA */}
+      {/* Builder's Picks CTA */}
       <div style={{ borderTop: "1px solid var(--border-subtle)" }} />
       <section className="py-16 animate-fade-in-up delay-400">
-        <Link href="/generate" className="group block">
+        <Link href="/leaderboard" className="group block">
           <div className="card p-8 hover:scale-[1.005] transition-transform">
             <div className="flex items-center justify-between gap-4">
               <div>
@@ -313,15 +312,14 @@ export default async function Home() {
                   className="text-base font-bold mb-2"
                   style={{ fontFamily: "var(--font-syne), sans-serif" }}
                 >
-                  Need a stack recommendation?
+                  Builder&rsquo;s Picks
                 </h3>
                 <p
                   className="text-sm leading-relaxed"
                   style={{ color: "var(--text-secondary)" }}
                 >
-                  Describe what you want to build. Get a recommended stack,
-                  architecture diagram, and step-by-step build plan — powered by
-                  live tool data.
+                  Curated AI tools organized by use case — what top builders actually use
+                  to ship.
                 </p>
               </div>
               <ArrowRight
