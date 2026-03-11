@@ -1,58 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
-import { db } from "@/lib/db";
-import { tools, momentumScores, githubSnapshots } from "@/lib/schema";
-import { desc, eq } from "drizzle-orm";
+import type Anthropic from "@anthropic-ai/sdk";
 import { sseMessage } from "@/lib/sse";
 import {
   isGeneratedArchitectureResult,
   type GeneratedArchitectureResult,
 } from "@/lib/architecture";
+import { getToolsWithLatestMetrics } from "@/lib/queries";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
-const anthropic = new Anthropic();
+// Lazy-init: only creates client when ANTHROPIC_API_KEY is set
+async function getAnthropicClient() {
+  const { default: AnthropicSDK } = await import("@anthropic-ai/sdk");
+  return new AnthropicSDK();
+}
 
 async function getLeaderboardContext(): Promise<string> {
-  const allTools = await db.select().from(tools);
+  const allTools = await getToolsWithLatestMetrics();
 
-  const toolsWithScores = await Promise.all(
-    allTools.map(async (tool) => {
-      const [score] = await db
-        .select()
-        .from(momentumScores)
-        .where(eq(momentumScores.toolId, tool.id))
-        .orderBy(desc(momentumScores.calculatedAt))
-        .limit(1);
-
-      const [gh] = await db
-        .select()
-        .from(githubSnapshots)
-        .where(eq(githubSnapshots.toolId, tool.id))
-        .orderBy(desc(githubSnapshots.collectedAt))
-        .limit(1);
-
-      return {
-        name: tool.name,
-        category: tool.category,
-        description: tool.description,
-        stars: gh?.stars ?? 0,
-        starVelocity: score?.starVelocity ?? 0,
-        hnMentions7d: score?.hnMentions7d ?? 0,
-        npmDownloads7d: score?.npmDownloads7d ?? 0,
-        pypiDownloads7d: score?.pypiDownloads7d ?? 0,
-        overallScore: score?.overallScore ?? 0,
-      };
-    })
-  );
-
-  toolsWithScores.sort((a, b) => b.overallScore - a.overallScore);
-
-  return toolsWithScores
+  return allTools
+    .sort((a, b) => b.overallScore - a.overallScore)
     .map(
       (t) =>
-        `- ${t.name} (${t.category}): ${t.stars.toLocaleString()} stars, velocity=${t.starVelocity}/day, downloads=${((t.npmDownloads7d ?? 0) + (t.pypiDownloads7d ?? 0)).toLocaleString()}/wk, momentum=${t.overallScore.toFixed(1)} — ${t.description}`
+        `- ${t.name} (${t.category}): ${t.stars.toLocaleString()} stars, velocity=${t.starVelocity}/day, downloads=${(t.npmDownloads7d + t.pypiDownloads7d).toLocaleString()}/wk, momentum=${t.overallScore.toFixed(1)} — ${t.description}`
     )
     .join("\n");
 }
@@ -82,8 +53,7 @@ const STAGE1_TOOL: Anthropic.Tool = {
             },
             reason: {
               type: "string",
-              description:
-                "Why this tool is recommended, referencing momentum data",
+              description: "Why this tool is recommended, referencing momentum data",
             },
           },
           required: ["name", "category", "reason"],
@@ -106,13 +76,7 @@ const STAGE1_TOOL: Anthropic.Tool = {
         description: "Key tradeoffs and considerations for this architecture",
       },
     },
-    required: [
-      "summary",
-      "tools",
-      "diagramDescription",
-      "buildSteps",
-      "tradeoffs",
-    ],
+    required: ["summary", "tools", "diagramDescription", "buildSteps", "tradeoffs"],
   },
 };
 
@@ -124,12 +88,39 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
-  const prompt = typeof (body as { prompt?: unknown })?.prompt === "string"
-    ? (body as { prompt: string }).prompt.trim()
-    : "";
+  const prompt =
+    typeof (body as { prompt?: unknown })?.prompt === "string"
+      ? (body as { prompt: string }).prompt.trim()
+      : "";
 
   if (!prompt || prompt.length > 2000) {
     return NextResponse.json({ error: "Invalid prompt" }, { status: 400 });
+  }
+
+  // Anthropic API disabled — return friendly message (after input validation)
+  if (!process.env.ANTHROPIC_API_KEY) {
+    const encoder = new TextEncoder();
+    const stream = new ReadableStream({
+      start(controller) {
+        controller.enqueue(
+          encoder.encode(
+            sseMessage({
+              status: "error",
+              error:
+                "Architecture generation is temporarily disabled. Set ANTHROPIC_API_KEY to enable.",
+            })
+          )
+        );
+        controller.close();
+      },
+    });
+    return new Response(stream, {
+      headers: {
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache",
+        Connection: "keep-alive",
+      },
+    });
   }
 
   const encoder = new TextEncoder();
@@ -149,6 +140,7 @@ export async function POST(request: NextRequest) {
           message: "Selecting tools and designing architecture...",
         });
 
+        const anthropic = await getAnthropicClient();
         const stage1Response = await anthropic.messages.create({
           model: "claude-sonnet-4-20250514",
           max_tokens: 3072,
