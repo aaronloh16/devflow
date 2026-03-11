@@ -1,324 +1,351 @@
 import Link from "next/link";
-import { Trophy, Sparkles, ArrowUpRight, Star, Radio, Zap } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import { WorkflowCard } from "@/components/workflow-card";
+import { CATEGORIES } from "@/lib/categories";
 
 export const dynamic = "force-dynamic";
 
-interface TopMover {
-  name: string;
-  repo: string;
-  stars: number;
-  starVelocity: number;
-  overallScore: number;
+interface WorkflowPreview {
+  slug: string;
+  title: string;
+  description: string;
+  difficulty: "beginner" | "intermediate" | "advanced";
+  toolNames: string[];
+  upvoteCount: number;
+  submitterName: string;
+  submitterRole: string | null;
+  timeSaved: string | null;
+  isVerified: boolean;
 }
 
-async function getTopMovers(): Promise<TopMover[]> {
+interface ToolCategory {
+  category: string;
+  count: number;
+}
+
+async function getFeaturedWorkflows(): Promise<WorkflowPreview[]> {
   try {
     const { db } = await import("@/lib/db");
-    const { tools, momentumScores, githubSnapshots } = await import("@/lib/schema");
-    const { eq, desc } = await import("drizzle-orm");
+    const { workflows, workflowTools, tools } = await import("@/lib/schema");
+    const { desc, eq } = await import("drizzle-orm");
 
-    const allTools = await db.select().from(tools);
+    const rows = await db
+      .select()
+      .from(workflows)
+      .orderBy(desc(workflows.upvoteCount))
+      .limit(6);
 
-    const toolsWithScores = await Promise.all(
-      allTools.map(async (tool) => {
-        const [latestScore] = await db
-          .select()
-          .from(momentumScores)
-          .where(eq(momentumScores.toolId, tool.id))
-          .orderBy(desc(momentumScores.calculatedAt))
-          .limit(1);
-
-        const [latestGH] = await db
-          .select()
-          .from(githubSnapshots)
-          .where(eq(githubSnapshots.toolId, tool.id))
-          .orderBy(desc(githubSnapshots.collectedAt))
-          .limit(1);
+    const results = await Promise.all(
+      rows.map(async (w) => {
+        const toolRows = await db
+          .select({ name: tools.name })
+          .from(workflowTools)
+          .innerJoin(tools, eq(workflowTools.toolId, tools.id))
+          .where(eq(workflowTools.workflowId, w.id))
+          .orderBy(workflowTools.usageOrder);
 
         return {
-          name: tool.name,
-          repo: tool.repo,
-          stars: latestGH?.stars ?? 0,
-          starVelocity: latestScore?.starVelocity ?? 0,
-          overallScore: latestScore?.overallScore ?? 0,
+          slug: w.slug,
+          title: w.title,
+          description: w.description,
+          difficulty: w.difficulty as "beginner" | "intermediate" | "advanced",
+          toolNames: toolRows.map((t) => t.name),
+          upvoteCount: w.upvoteCount,
+          submitterName: w.submitterName,
+          submitterRole: w.submitterRole,
+          timeSaved: w.timeSaved,
+          isVerified: w.isVerified,
         };
       })
     );
 
-    toolsWithScores.sort((a, b) => b.overallScore - a.overallScore);
-    return toolsWithScores.slice(0, 5);
+    return results;
+  } catch {
+    return [];
+  }
+}
+
+async function getToolCategories(): Promise<ToolCategory[]> {
+  try {
+    const { db } = await import("@/lib/db");
+    const { tools } = await import("@/lib/schema");
+    const { sql } = await import("drizzle-orm");
+
+    const rows = await db
+      .select({
+        category: tools.category,
+        count: sql<number>`count(*)::int`.as("count"),
+      })
+      .from(tools)
+      .groupBy(tools.category)
+      .orderBy(sql`count(*) desc`);
+
+    return rows;
   } catch {
     return [];
   }
 }
 
 export default async function Home() {
-  const topMovers = await getTopMovers();
+  const [featuredWorkflows, toolCategories] = await Promise.all([
+    getFeaturedWorkflows(),
+    getToolCategories(),
+  ]);
 
   return (
-    <div className="relative overflow-hidden">
-      {/* Dot grid background */}
-      <div
-        className="absolute inset-0 bg-dot-grid pointer-events-none"
-        style={{ opacity: 0.4 }}
-      />
-
-      {/* Radial fade-out over dot grid */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: "radial-gradient(ellipse 80% 50% at 50% 0%, transparent 0%, var(--bg-base) 70%)",
-        }}
-      />
-
-      {/* Hero glow */}
-      <div
-        className="absolute pointer-events-none"
-        style={{
-          top: "-10%",
-          left: "50%",
-          transform: "translateX(-50%)",
-          width: "700px",
-          height: "500px",
-          background: "radial-gradient(ellipse, rgba(34,211,238,0.06) 0%, transparent 70%)",
-          filter: "blur(40px)",
-        }}
-      />
-
-      <div className="max-w-5xl mx-auto px-6 pt-24 pb-20 relative">
-        {/* Hero */}
-        <div className="text-center space-y-6 mb-24 animate-fade-in-up">
-          {/* Live badge */}
-          <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full text-xs" style={{ background: "var(--bg-surface)", border: "1px solid var(--border-subtle)", color: "var(--text-secondary)" }}>
-            <span className="live-dot" />
-            <span>Updated daily from GitHub &amp; Hacker News</span>
-          </div>
-
-          {/* Headline */}
-          <h1
-            className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.05]"
-            style={{ fontFamily: "var(--font-syne), sans-serif", letterSpacing: "-0.03em" }}
+    <div className="max-w-4xl mx-auto px-6">
+      {/* Hero */}
+      <section className="pt-20 pb-16 animate-fade-in-up">
+        <p
+          className="text-xs font-semibold uppercase tracking-widest mb-5"
+          style={{
+            color: "var(--text-tertiary)",
+            letterSpacing: "0.15em",
+            fontFamily: "var(--font-jetbrains-mono), monospace",
+          }}
+        >
+          Developer intelligence
+        </p>
+        <h1
+          className="text-4xl sm:text-5xl font-bold tracking-tight leading-[1.1] mb-5"
+          style={{
+            fontFamily: "var(--font-syne), sans-serif",
+            letterSpacing: "-0.03em",
+          }}
+        >
+          How top engineers
+          <br />
+          actually ship with AI
+        </h1>
+        <p
+          className="text-base max-w-lg leading-relaxed mb-8"
+          style={{ color: "var(--text-secondary)" }}
+        >
+          The real tool stacks, prompts, and daily setups behind the
+          engineers shipping 10x faster — from parallel AI agents to
+          production prompting techniques.
+        </p>
+        <div className="flex gap-3">
+          <Link
+            href="/workflows"
+            className="btn-primary px-5 py-2.5 rounded-lg text-sm inline-flex items-center gap-2"
+            style={{ fontFamily: "var(--font-syne), sans-serif" }}
           >
-            What developers are
-            <br />
-            <span style={{ color: "var(--accent-cyan)" }} className="text-glow-cyan">
-              actually using
-            </span>
-          </h1>
-
-          <p className="text-lg max-w-lg mx-auto leading-relaxed delay-100 animate-fade-in-up" style={{ color: "var(--text-secondary)" }}>
-            AI dev tool rankings backed by live sentiment data. See what&rsquo;s
-            gaining momentum, then generate an architecture that uses it.
-          </p>
-
-          <div className="flex gap-3 justify-center pt-2 delay-200 animate-fade-in-up">
-            <Link
-              href="/leaderboard"
-              className="group btn-primary px-6 py-3 rounded-xl text-sm inline-flex items-center gap-2"
-            >
-              View Leaderboard
-              <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </Link>
-            <Link
-              href="/generate"
-              className="btn-ghost px-6 py-3 rounded-xl text-sm inline-flex items-center gap-2"
-            >
-              Generate a Stack
-              <Sparkles className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-        </div>
-
-        {/* Feature cards */}
-        <div className="grid md:grid-cols-2 gap-4 mb-20 delay-300 animate-fade-in-up">
-          {/* Leaderboard card */}
-          <Link href="/leaderboard" className="group block">
-            <div className="card p-6 h-full hover:scale-[1.01] transition-transform cursor-pointer">
-              <div className="flex items-start gap-4">
-                <div
-                  className="shrink-0 w-10 h-10 rounded-xl flex items-center justify-center"
-                  style={{ background: "var(--accent-amber-dim)", border: "1px solid rgba(251,191,36,0.2)" }}
-                >
-                  <Trophy className="w-5 h-5" style={{ color: "var(--accent-amber)" }} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between gap-2 mb-2">
-                    <h2 className="text-base font-semibold" style={{ fontFamily: "var(--font-syne), sans-serif" }}>
-                      Momentum Leaderboard
-                    </h2>
-                    <ArrowUpRight
-                      className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
-                      style={{ color: "var(--text-secondary)" }}
-                    />
-                  </div>
-                  <p className="text-sm leading-relaxed mb-3" style={{ color: "var(--text-secondary)" }}>
-                    Ranks 60+ AI dev tools by GitHub star velocity and Hacker News activity.
-                    Open-source scoring — no black boxes.
-                  </p>
-                  <div className="flex items-center gap-3 text-xs" style={{ color: "var(--text-tertiary)" }}>
-                    <span className="flex items-center gap-1">
-                      <Star className="w-3 h-3" /> Star velocity
-                    </span>
-                    <span>·</span>
-                    <span>HN mentions</span>
-                    <span>·</span>
-                    <span>Daily updates</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            Browse Workflows
+            <ArrowRight className="w-3.5 h-3.5" />
           </Link>
-
-          {/* Generator card */}
-          <Link href="/generate" className="group block">
-            <div className="card p-6 h-full hover:scale-[1.01] transition-transform cursor-pointer">
-              <div className="flex items-start gap-4">
-                <div
-                  className="shrink-0 w-10 h-10 rounded-xl flex items-center justify-center"
-                  style={{ background: "var(--accent-violet-dim)", border: "1px solid rgba(167,139,250,0.2)" }}
-                >
-                  <Sparkles className="w-5 h-5" style={{ color: "var(--accent-violet)" }} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between gap-2 mb-2">
-                    <h2 className="text-base font-semibold" style={{ fontFamily: "var(--font-syne), sans-serif" }}>
-                      Architecture Generator
-                    </h2>
-                    <ArrowUpRight
-                      className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
-                      style={{ color: "var(--text-secondary)" }}
-                    />
-                  </div>
-                  <p className="text-sm leading-relaxed mb-3" style={{ color: "var(--text-secondary)" }}>
-                    Describe what you want to build. Get a recommended stack, Mermaid
-                    diagram, and step-by-step build plan — powered by live data.
-                  </p>
-                  <div className="flex items-center gap-3 text-xs" style={{ color: "var(--text-tertiary)" }}>
-                    <span className="flex items-center gap-1">
-                      <Radio className="w-3 h-3" /> Claude-powered
-                    </span>
-                    <span>·</span>
-                    <span>Diagrams</span>
-                    <span>·</span>
-                    <span>Shareable</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <Link
+            href="/submit"
+            className="btn-ghost px-5 py-2.5 rounded-lg text-sm inline-flex items-center gap-2"
+          >
+            Share Yours
           </Link>
         </div>
+      </section>
 
-        {/* Top Movers preview */}
-        {topMovers.length > 0 && (
-          <div className="delay-400 animate-fade-in-up">
-            <div className="flex items-center justify-between mb-5">
-              <div className="flex items-center gap-2.5">
-                <div className="live-dot" />
-                <span
-                  className="text-xs font-semibold uppercase tracking-widest"
-                  style={{ color: "var(--text-secondary)", fontFamily: "var(--font-syne), sans-serif", letterSpacing: "0.12em" }}
-                >
-                  Top Movers
-                </span>
-              </div>
-              <Link
-                href="/leaderboard"
-                className="hover-text-secondary text-xs flex items-center gap-1"
+      {/* How it works */}
+      <section className="pb-16 animate-fade-in-up delay-100">
+        <div className="grid md:grid-cols-3 gap-8">
+          {[
+            {
+              n: "01",
+              title: "Browse",
+              desc: "See how engineers at top companies set up their AI tooling — real workflows, ranked by the community.",
+            },
+            {
+              n: "02",
+              title: "Copy",
+              desc: "Copy their exact tool combinations, agent configurations, and prompting techniques. All battle-tested.",
+            },
+            {
+              n: "03",
+              title: "Share",
+              desc: "Share your own setup and help other developers level up their AI tooling.",
+            },
+          ].map((step) => (
+            <div key={step.n}>
+              <span
+                className="text-xs font-bold"
+                style={{
+                  color: "var(--text-tertiary)",
+                  fontFamily: "var(--font-jetbrains-mono), monospace",
+                }}
               >
-                View all <ArrowUpRight className="w-3 h-3" />
+                {step.n}
+              </span>
+              <h3
+                className="text-sm font-semibold mt-2 mb-1.5"
+                style={{ fontFamily: "var(--font-syne), sans-serif" }}
+              >
+                {step.title}
+              </h3>
+              <p
+                className="text-sm leading-relaxed"
+                style={{ color: "var(--text-secondary)" }}
+              >
+                {step.desc}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <div style={{ borderTop: "1px solid var(--border-subtle)" }} />
+
+      {/* Featured Workflows */}
+      <section className="py-16 animate-fade-in-up delay-200">
+        {featuredWorkflows.length > 0 ? (
+          <>
+            <div className="flex items-center justify-between mb-6">
+              <h2
+                className="text-lg font-bold"
+                style={{ fontFamily: "var(--font-syne), sans-serif" }}
+              >
+                Trending Workflows
+              </h2>
+              <Link
+                href="/workflows"
+                className="text-xs flex items-center gap-1 transition-colors hover-text-secondary"
+              >
+                View all <ArrowRight className="w-3 h-3" />
               </Link>
             </div>
-
-            <div className="rounded-xl overflow-hidden" style={{ border: "1px solid var(--border-subtle)" }}>
-              <table className="w-full">
-                <thead>
-                  <tr style={{ borderBottom: "1px solid var(--border-subtle)", background: "var(--bg-surface)" }}>
-                    <th className="text-left px-5 py-3 text-[10px] font-semibold uppercase tracking-widest w-12" style={{ color: "var(--text-tertiary)", fontFamily: "var(--font-syne), sans-serif" }}>
-                      #
-                    </th>
-                    <th className="text-left px-5 py-3 text-[10px] font-semibold uppercase tracking-widest" style={{ color: "var(--text-tertiary)", fontFamily: "var(--font-syne), sans-serif" }}>
-                      Tool
-                    </th>
-                    <th className="text-right px-5 py-3 text-[10px] font-semibold uppercase tracking-widest" style={{ color: "var(--text-tertiary)", fontFamily: "var(--font-syne), sans-serif" }}>
-                      Stars
-                    </th>
-                    <th className="text-right px-5 py-3 text-[10px] font-semibold uppercase tracking-widest hidden sm:table-cell" style={{ color: "var(--text-tertiary)", fontFamily: "var(--font-syne), sans-serif" }}>
-                      Velocity
-                    </th>
-                    <th className="text-right px-5 py-3 text-[10px] font-semibold uppercase tracking-widest" style={{ color: "var(--text-tertiary)", fontFamily: "var(--font-syne), sans-serif" }}>
-                      Score
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {topMovers.map((tool, i) => (
-                    <tr
-                      key={tool.repo}
-                      className={`home-table-row transition-colors ${i === 0 ? "row-rank-1" : i === 1 ? "row-rank-2" : i === 2 ? "row-rank-3" : ""}`}
-                      style={{ borderBottom: i < topMovers.length - 1 ? "1px solid var(--border-subtle)" : "none" }}
-                    >
-                      <td className="px-5 py-3.5">
-                        {i === 0 ? (
-                          <span className="inline-flex items-center justify-center w-5 h-5 rounded-md text-[10px] font-bold" style={{ background: "var(--accent-amber-dim)", color: "var(--accent-amber)", border: "1px solid rgba(251,191,36,0.2)" }}>1</span>
-                        ) : i === 1 ? (
-                          <span className="inline-flex items-center justify-center w-5 h-5 rounded-md text-[10px] font-bold" style={{ background: "rgba(148,163,184,0.08)", color: "#94a3b8", border: "1px solid rgba(148,163,184,0.15)" }}>2</span>
-                        ) : i === 2 ? (
-                          <span className="inline-flex items-center justify-center w-5 h-5 rounded-md text-[10px] font-bold" style={{ background: "rgba(251,146,60,0.08)", color: "#fb923c", border: "1px solid rgba(251,146,60,0.15)" }}>3</span>
-                        ) : (
-                          <span className="text-xs font-mono pl-1" style={{ color: "var(--text-tertiary)", fontFamily: "var(--font-jetbrains-mono), monospace" }}>{i + 1}</span>
-                        )}
-                      </td>
-                      <td className="px-5 py-3.5">
-                        <a
-                          href={`https://github.com/${tool.repo}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-sm font-medium inline-flex items-center gap-1.5 group/link"
-                          style={{ color: "var(--text-primary)" }}
-                        >
-                          {tool.name}
-                          <ArrowUpRight className="w-3 h-3 opacity-0 group-hover/link:opacity-100 transition-opacity" style={{ color: "var(--text-tertiary)" }} />
-                        </a>
-                      </td>
-                      <td className="px-5 py-3.5 text-right text-sm tabular-nums" style={{ color: "var(--text-secondary)", fontFamily: "var(--font-jetbrains-mono), monospace" }}>
-                        {tool.stars.toLocaleString()}
-                      </td>
-                      <td className="px-5 py-3.5 text-right text-sm hidden sm:table-cell tabular-nums" style={{ fontFamily: "var(--font-jetbrains-mono), monospace" }}>
-                        <span style={{ color: tool.starVelocity > 0 ? "var(--accent-green)" : tool.starVelocity < 0 ? "var(--accent-red)" : "var(--text-tertiary)" }}>
-                          <span className="flex items-center justify-end gap-1">
-                            {tool.starVelocity > 0 && <Zap className="w-3 h-3" />}
-                            {tool.starVelocity >= 0 ? "+" : ""}
-                            {tool.starVelocity.toFixed(1)}/d
-                          </span>
-                        </span>
-                      </td>
-                      <td className="px-5 py-3.5 text-right">
-                        <span className="text-sm font-bold tabular-nums" style={{ color: "var(--accent-cyan)", fontFamily: "var(--font-jetbrains-mono), monospace" }}>
-                          {tool.overallScore.toFixed(1)}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="grid md:grid-cols-2 gap-4">
+              {featuredWorkflows.map((w) => (
+                <WorkflowCard key={w.slug} {...w} />
+              ))}
             </div>
+          </>
+        ) : (
+          <div className="text-center py-8">
+            <p
+              className="text-xs font-semibold uppercase tracking-widest mb-5"
+              style={{
+                color: "var(--text-tertiary)",
+                letterSpacing: "0.15em",
+              }}
+            >
+              Launching
+            </p>
+            <h2
+              className="text-xl font-bold mb-3"
+              style={{ fontFamily: "var(--font-syne), sans-serif" }}
+            >
+              The first workflows are being curated
+            </h2>
+            <p
+              className="text-sm max-w-md mx-auto mb-8 leading-relaxed"
+              style={{ color: "var(--text-secondary)" }}
+            >
+              We&rsquo;re collecting the real AI setups and techniques from
+              engineers at top companies. Be the first to share how you ship.
+            </p>
+            <Link
+              href="/submit"
+              className="btn-primary px-5 py-2.5 rounded-lg text-sm inline-block"
+              style={{ fontFamily: "var(--font-syne), sans-serif" }}
+            >
+              Submit a Workflow
+            </Link>
           </div>
         )}
+      </section>
 
-        {/* Footer */}
-        <div className="text-center pt-16 pb-4">
-          <p className="text-xs" style={{ color: "var(--text-tertiary)" }}>
-            Open-source scoring algorithm · Built in public ·{" "}
-            <a
-              href="https://github.com/aaronloh16/ai-stack-radar"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover-text-secondary"
-            >
-              View source
-            </a>
-          </p>
-        </div>
+      {/* Browse by Category */}
+      {toolCategories.length > 0 && (
+        <>
+          <div style={{ borderTop: "1px solid var(--border-subtle)" }} />
+          <section className="py-16 animate-fade-in-up delay-300">
+            <div className="flex items-center justify-between mb-6">
+              <h2
+                className="text-lg font-bold"
+                style={{ fontFamily: "var(--font-syne), sans-serif" }}
+              >
+                Browse by Category
+              </h2>
+              <Link
+                href="/leaderboard"
+                className="text-xs flex items-center gap-1 transition-colors hover-text-secondary"
+              >
+                All tools <ArrowRight className="w-3 h-3" />
+              </Link>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+              {toolCategories.map((cat) => (
+                <Link
+                  key={cat.category}
+                  href="/leaderboard"
+                  className="card px-4 py-3.5 hover:scale-[1.01] transition-transform"
+                >
+                  <p
+                    className="text-sm font-medium mb-0.5"
+                    style={{
+                      color: "var(--text-primary)",
+                      fontFamily: "var(--font-syne), sans-serif",
+                    }}
+                  >
+                    {CATEGORIES[cat.category] || cat.category}
+                  </p>
+                  <p
+                    className="text-xs"
+                    style={{
+                      color: "var(--text-tertiary)",
+                      fontFamily: "var(--font-jetbrains-mono), monospace",
+                    }}
+                  >
+                    {cat.count} {cat.count === 1 ? "tool" : "tools"}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          </section>
+        </>
+      )}
+
+      {/* Generate Stack CTA */}
+      <div style={{ borderTop: "1px solid var(--border-subtle)" }} />
+      <section className="py-16 animate-fade-in-up delay-400">
+        <Link href="/generate" className="group block">
+          <div className="card p-8 hover:scale-[1.005] transition-transform">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <h3
+                  className="text-base font-bold mb-2"
+                  style={{ fontFamily: "var(--font-syne), sans-serif" }}
+                >
+                  Need a stack recommendation?
+                </h3>
+                <p
+                  className="text-sm leading-relaxed"
+                  style={{ color: "var(--text-secondary)" }}
+                >
+                  Describe what you want to build. Get a recommended stack,
+                  architecture diagram, and step-by-step build plan — powered by
+                  live tool data.
+                </p>
+              </div>
+              <ArrowRight
+                className="w-5 h-5 shrink-0 transition-transform group-hover:translate-x-1"
+                style={{ color: "var(--text-tertiary)" }}
+              />
+            </div>
+          </div>
+        </Link>
+      </section>
+
+      {/* Footer */}
+      <div className="text-center pb-12">
+        <p className="text-xs" style={{ color: "var(--text-tertiary)" }}>
+          Built in public ·{" "}
+          <a
+            href="https://github.com/aaronloh16/devflow"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover-text-secondary"
+          >
+            View source
+          </a>
+        </p>
       </div>
     </div>
   );

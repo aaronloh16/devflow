@@ -30,7 +30,7 @@ interface GitHubRepo {
 async function fetchGitHubRepo(repo: string): Promise<GitHubRepo | null> {
   const headers: Record<string, string> = {
     Accept: "application/vnd.github.v3+json",
-    "User-Agent": "ai-stack-radar",
+    "User-Agent": "devflow",
   };
   if (GITHUB_TOKEN) {
     headers.Authorization = `Bearer ${GITHUB_TOKEN}`;

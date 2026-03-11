@@ -28,7 +28,7 @@ async function fetchFileContent(
   const token = process.env.GITHUB_TOKEN;
   const headers: Record<string, string> = {
     Accept: "application/vnd.github.v3+json",
-    "User-Agent": "ai-stack-radar",
+    "User-Agent": "devflow",
   };
   if (token) headers.Authorization = `Bearer ${token}`;
 
