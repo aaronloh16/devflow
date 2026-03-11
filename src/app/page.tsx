@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { WorkflowCard } from "@/components/workflow-card";
+import { CATEGORIES } from "@/lib/categories";
 
 export const dynamic = "force-dynamic";
 
@@ -103,7 +104,7 @@ export default async function Home() {
             fontFamily: "var(--font-jetbrains-mono), monospace",
           }}
         >
-          Community-sourced workflows
+          Developer intelligence
         </p>
         <h1
           className="text-4xl sm:text-5xl font-bold tracking-tight leading-[1.1] mb-5"
@@ -112,16 +113,17 @@ export default async function Home() {
             letterSpacing: "-0.03em",
           }}
         >
-          How the best engineers
+          How top engineers
           <br />
-          ship with AI
+          actually ship with AI
         </h1>
         <p
           className="text-base max-w-lg leading-relaxed mb-8"
           style={{ color: "var(--text-secondary)" }}
         >
-          Real workflows from real engineers. The exact tools, prompts, and
-          step-by-step processes used to build production software with AI.
+          The real tool stacks, prompts, and daily setups behind the
+          engineers shipping 10x faster — from parallel AI agents to
+          production prompting techniques.
         </p>
         <div className="flex gap-3">
           <Link
@@ -148,17 +150,17 @@ export default async function Home() {
             {
               n: "01",
               title: "Browse",
-              desc: "Discover workflows from engineers at top companies, ranked by community upvotes.",
+              desc: "See how engineers at top companies set up their AI tooling — real workflows, ranked by the community.",
             },
             {
               n: "02",
               title: "Copy",
-              desc: "Get the exact tools, prompts, and step-by-step processes that work in production.",
+              desc: "Copy their exact tool combinations, agent configurations, and prompting techniques. All battle-tested.",
             },
             {
               n: "03",
               title: "Share",
-              desc: "Submit your own workflows and build your reputation as a contributor.",
+              desc: "Share your own setup and help other developers level up their AI tooling.",
             },
           ].map((step) => (
             <div key={step.n}>
@@ -235,8 +237,8 @@ export default async function Home() {
               className="text-sm max-w-md mx-auto mb-8 leading-relaxed"
               style={{ color: "var(--text-secondary)" }}
             >
-              We&rsquo;re collecting battle-tested AI workflows from engineers
-              at top companies. Be among the first to share yours.
+              We&rsquo;re collecting the real AI setups and techniques from
+              engineers at top companies. Be the first to share how you ship.
             </p>
             <Link
               href="/submit"
@@ -282,7 +284,7 @@ export default async function Home() {
                       fontFamily: "var(--font-syne), sans-serif",
                     }}
                   >
-                    {cat.category}
+                    {CATEGORIES[cat.category] || cat.category}
                   </p>
                   <p
                     className="text-xs"

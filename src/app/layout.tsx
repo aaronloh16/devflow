@@ -18,7 +18,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "DevFlow",
   description:
-    "Real AI Dev Workflows from the Top 1% — Discover exactly how elite engineers use AI to ship real products.",
+    "See how top engineers actually use AI to ship — real tool setups, techniques, and workflows from the developers building with it.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
