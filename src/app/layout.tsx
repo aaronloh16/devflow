@@ -16,9 +16,9 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AI Stack Radar",
+  title: "DevFlow",
   description:
-    "AI dev tool leaderboard + architecture generator backed by live sentiment data",
+    "Real AI Dev Workflows from the Top 1% — Discover exactly how elite engineers use AI to ship real products.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

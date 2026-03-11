@@ -14,13 +14,13 @@ export async function generateMetadata({
   const { view } = await searchParams;
   if (view === "essentials") {
     return {
-      title: "Developer Essentials | AI Stack Radar",
+      title: "Developer Essentials | DevFlow",
       description:
         "Curated AI dev tools organized by use case with tier ratings.",
     };
   }
   return {
-    title: "Momentum Leaderboard | AI Stack Radar",
+    title: "Momentum Leaderboard | DevFlow",
     description:
       "AI dev tools ranked by real developer sentiment. Updated daily.",
   };
