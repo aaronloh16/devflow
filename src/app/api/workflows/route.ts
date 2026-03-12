@@ -1,12 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import {
-  workflows,
-  workflowTools,
-  tools,
-  users,
-  type WorkflowStep,
-} from "@/lib/schema";
+import { workflows, workflowTools, tools, users, type WorkflowStep } from "@/lib/schema";
 import { desc, eq, ilike, or, sql } from "drizzle-orm";
 import { getFingerprint } from "@/lib/fingerprint";
 
@@ -94,10 +88,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ workflows: results, page, limit });
   } catch (error) {
     console.error("Workflows GET error:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch workflows" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to fetch workflows" }, { status: 500 });
   }
 }
 
@@ -110,23 +101,29 @@ export async function POST(request: NextRequest) {
     const title = String(body.title ?? "").trim();
     const description = String(body.description ?? "").trim();
     const difficulty = String(body.difficulty ?? "");
-    const submitterName = String(body.submitterName ?? "").trim();
+    const submitterName = String(body.submitterName ?? "").trim() || "Anonymous";
     const steps = body.steps as WorkflowStep[] | undefined;
 
     if (!title || title.length < 5) {
-      return NextResponse.json({ error: "Title must be at least 5 characters" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Title must be at least 5 characters" },
+        { status: 400 }
+      );
     }
     if (!description || description.length < 10) {
-      return NextResponse.json({ error: "Description must be at least 10 characters" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Description must be at least 10 characters" },
+        { status: 400 }
+      );
     }
     if (!["beginner", "intermediate", "advanced"].includes(difficulty)) {
       return NextResponse.json({ error: "Invalid difficulty" }, { status: 400 });
     }
-    if (!submitterName) {
-      return NextResponse.json({ error: "Name is required" }, { status: 400 });
-    }
     if (!steps || !Array.isArray(steps) || steps.length === 0) {
-      return NextResponse.json({ error: "At least one step is required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "At least one step is required" },
+        { status: 400 }
+      );
     }
 
     const fingerprintHash = await getFingerprint();
@@ -211,9 +208,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ slug: workflow.slug }, { status: 201 });
   } catch (error) {
     console.error("Workflow POST error:", error);
-    return NextResponse.json(
-      { error: "Failed to create workflow" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to create workflow" }, { status: 500 });
   }
 }
