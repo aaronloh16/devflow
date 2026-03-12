@@ -45,14 +45,14 @@ export default async function SubmitPage() {
             letterSpacing: "-0.03em",
           }}
         >
-          Share how you ship
+          Share a workflow
         </h1>
         <p
           className="text-sm max-w-md mx-auto leading-relaxed"
           style={{ color: "var(--text-secondary)" }}
         >
-          Your AI tool setup could change how someone else works.
-          Walk us through it.
+          Quick post — just describe what you do with AI tools and how. Takes about a
+          minute.
         </p>
       </div>
 
